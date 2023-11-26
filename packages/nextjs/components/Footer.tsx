@@ -5,7 +5,7 @@ import { CurrencyDollarIcon, MagnifyingGlassIcon } from "@heroicons/react/24/out
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { SwitchTheme } from "~~/components/SwitchTheme";
 import { BuidlGuidlLogo } from "~~/components/assets/BuidlGuidlLogo";
-import { Faucet } from "~~/components/scaffold-eth";
+// import { Faucet } from "~~/components/scaffold-eth";
 import { useGlobalState } from "~~/services/store/store";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
@@ -31,7 +31,7 @@ export const Footer = () => {
             )}
             {isLocalNetwork && (
               <>
-                <Faucet />
+                {/* <Faucet /> */}
                 <Link href="/blockexplorer" passHref className="btn btn-primary btn-sm font-normal normal-case gap-1">
                   <MagnifyingGlassIcon className="h-4 w-4" />
                   <span>Block Explorer</span>
