@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { publicClientSelector } from "./publicClientSelector";
 import { formatEther } from "viem";
 
-interface BalanceGetProps {
+interface NativeTokenBalanceProps {
   address: string;
   networkName: string;
 }
 
-export const NativeTokenBalance = ({ address, networkName }: BalanceGetProps) => {
+export const NativeTokenBalance = ({ address, networkName }: NativeTokenBalanceProps) => {
   const [balance, setBalance] = useState(BigInt(0));
 
   useEffect(() => {
@@ -26,19 +26,3 @@ export const NativeTokenBalance = ({ address, networkName }: BalanceGetProps) =>
 
   return <>{formatEther(balance)}</>;
 };
-
-// export const BalanceGet = async (address: string, networkName: string) => {
-//   const [balance, setBalance] = useState(BigInt(0));
-
-//   const publicClient = publicClientSelector(networkName);
-//   if (publicClient) {
-//     const balance = await publicClient.getBalance({
-//       address: address,
-//     });
-//     setBalance(balance);
-//   }
-
-//   console.log(balance);
-
-//   return <>{balance}</>;
-// };

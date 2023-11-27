@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ERC20TokenBalance } from "./ERC20TokenBalance";
 import { NativeTokenBalance } from "./NativeTokenBalance";
 import { Tokens } from "./Tokens";
+import { useSharedState } from "~~/sharedStateContext";
 
 interface ERC20TokensProps {
   networkName: string;
@@ -11,6 +12,13 @@ interface ERC20TokensProps {
 export const ERC20Tokens = ({ networkName, address }: ERC20TokensProps) => {
   const erc20Tokens = Tokens[String(networkName)].erc20Tokens;
   const nativeToken = Tokens[String(networkName)].nativeToken;
+  const { selectedTokenAddress, setSelectedTokenAddress } = useSharedState(); // Initialize with native token's address
+  const { setSelectedTokenName } = useSharedState();
+
+  const handleCheckboxChange = (tokenAddress: string, tokenName: string) => {
+    setSelectedTokenAddress(tokenAddress);
+    setSelectedTokenName(tokenName);
+  };
 
   return (
     <>
@@ -29,7 +37,12 @@ export const ERC20Tokens = ({ networkName, address }: ERC20TokensProps) => {
             <tr>
               <th>
                 <label>
-                  <input type="checkbox" className="checkbox" />
+                  <input
+                    type="checkbox"
+                    className="checkbox"
+                    checked={selectedTokenAddress === "nativeToken"}
+                    onChange={() => handleCheckboxChange("nativeToken", nativeToken.name)}
+                  />
                 </label>
               </th>
               <td>
@@ -53,7 +66,12 @@ export const ERC20Tokens = ({ networkName, address }: ERC20TokensProps) => {
               <tr key={token.address}>
                 <th>
                   <label>
-                    <input type="checkbox" className="checkbox" />
+                    <input
+                      type="checkbox"
+                      className="checkbox"
+                      checked={selectedTokenAddress === token.address}
+                      onChange={() => handleCheckboxChange(token.address, token.name)}
+                    />
                   </label>
                 </th>
                 <td>
