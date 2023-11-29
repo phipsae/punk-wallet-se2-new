@@ -4,12 +4,12 @@ import { privateKeyToAccount } from "viem/accounts";
 import { ERC20Tokens } from "~~/components/wallet/ERC20Tokens";
 import { NetworkMenu } from "~~/components/wallet/NetworkMenu";
 import { SelectedTokenBalance } from "~~/components/wallet/SelectedTokenBalance";
+import { SelectedTokenTransaction } from "~~/components/wallet/SelectedTokenTransaction";
 import { useSharedState } from "~~/sharedStateContext";
 
 const Wallet: NextPage = () => {
   const account = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PRIVATE_KEY_WALLET}`);
-  const { selectedChain } = useSharedState();
-  const { selectedTokenAddress, selectedTokenName } = useSharedState();
+  const { selectedChain, selectedTokenAddress, selectedTokenName } = useSharedState();
 
   return (
     <>
@@ -25,6 +25,11 @@ const Wallet: NextPage = () => {
             />
             <QRCodeSVG value={account.address} />
             Address: {account.address}
+            <SelectedTokenTransaction
+              networkName={selectedChain}
+              account={account}
+              tokenAddress={selectedTokenAddress}
+            />
           </div>
           <div className="flex flex-col flex-1 mt-5 border p-5 ">
             <ERC20Tokens networkName={selectedChain} address={account.address} />

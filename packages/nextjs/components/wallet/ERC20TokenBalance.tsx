@@ -10,7 +10,6 @@ interface ERC20TokensProps {
 }
 
 const abi = parseAbi([
-  //  ^? const abi: readonly [{ name: "balanceOf"; type: "function"; stateMutability:...
   "function balanceOf(address owner) view returns (uint256)",
   "event Transfer(address indexed from, address indexed to, uint256 amount)",
 ]);
@@ -21,14 +20,18 @@ export const ERC20TokenBalance = ({ networkName, tokenAddress, address }: ERC20T
   const publicClient = publicClientSelector(networkName);
 
   const getBalance = async () => {
-    if (publicClient) {
-      const data = await publicClient.readContract({
-        address: tokenAddress,
-        abi: abi,
-        functionName: "balanceOf",
-        args: [address],
-      });
-      setBalance(Number(data));
+    try {
+      if (publicClient) {
+        const data = await publicClient.readContract({
+          address: tokenAddress,
+          abi: abi,
+          functionName: "balanceOf",
+          args: [address],
+        });
+        setBalance(Number(data));
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

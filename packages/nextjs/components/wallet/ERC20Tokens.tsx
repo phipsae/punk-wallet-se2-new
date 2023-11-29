@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Image from "next/image";
 import { ERC20TokenBalance } from "./ERC20TokenBalance";
 import { NativeTokenBalance } from "./NativeTokenBalance";
@@ -19,6 +20,12 @@ export const ERC20Tokens = ({ networkName, address }: ERC20TokensProps) => {
     setSelectedTokenAddress(tokenAddress);
     setSelectedTokenName(tokenName);
   };
+
+  useEffect(() => {
+    // Set initial selected token to the native token when the component mounts
+    setSelectedTokenAddress("nativeToken");
+    setSelectedTokenName(nativeToken.name);
+  }, [nativeToken, setSelectedTokenAddress, setSelectedTokenName]);
 
   return (
     <>
