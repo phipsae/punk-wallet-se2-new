@@ -5,8 +5,12 @@ interface SharedStateContextProps {
   setSelectedChain: (value: string) => void;
   selectedTokenAddress: string;
   setSelectedTokenAddress: (value: string) => void;
+  selectedTokenImage: string;
+  setSelectedTokenImage: (value: string) => void;
   selectedTokenName: string;
   setSelectedTokenName: (value: string) => void;
+  selectedBlockExplorer: string;
+  setSelectedBlockExplorer: (value: string) => void;
   isConfirmed: boolean;
   setIsConfirmed: (value: boolean) => void;
 }
@@ -17,7 +21,11 @@ export const SharedStateProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [selectedChain, setSelectedChain] = useState<string>("mainnet");
   const [selectedTokenAddress, setSelectedTokenAddress] = useState<string>("nativeToken");
   const [selectedTokenName, setSelectedTokenName] = useState<string>("ETH");
+  const [selectedTokenImage, setSelectedTokenImage] = useState<string>("/ETH.png");
+  const [selectedBlockExplorer, setSelectedBlockExplorer] = useState<string>("/ETH.png");
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
+
+  // "https://etherscan.io/"
 
   return (
     <SharedStateContext.Provider
@@ -30,6 +38,10 @@ export const SharedStateProvider: React.FC<{ children: ReactNode }> = ({ childre
         setSelectedTokenName,
         isConfirmed,
         setIsConfirmed,
+        selectedTokenImage,
+        setSelectedTokenImage,
+        selectedBlockExplorer,
+        setSelectedBlockExplorer,
       }}
     >
       {children}

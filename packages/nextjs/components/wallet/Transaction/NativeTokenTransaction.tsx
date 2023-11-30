@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { publicClientSelector } from "./publicClientSelector";
-import { walletClientSelector } from "./walletClientSelector";
+import { publicClientSelector } from "../publicClientSelector";
+import { walletClientSelector } from "../walletClientSelector";
 import { parseEther } from "viem";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { Spinner } from "~~/components/assets/Spinner";
@@ -43,7 +43,7 @@ export const NativeTokenTransaction = ({ account, selectedChain }: NativeTokenTr
 
   useEffect(() => {
     if (isSent) {
-      notification.success("Transaction successfully submitted");
+      notification.success("Transaction submitted", { icon: "⏱️" });
       setIsSent(false);
     }
     if (isConfirmed && !isSent) {
@@ -54,29 +54,34 @@ export const NativeTokenTransaction = ({ account, selectedChain }: NativeTokenTr
 
   return (
     <>
-      <span className="w-1/2 mb-5">
-        <AddressInput value={to ?? ""} onChange={to => setTo(to)} placeholder="Address Receiver" />
-      </span>
-      <span className="w-1/2 mb-5">
-        <EtherInput value={amount} onChange={amount => setAmount(amount)} placeholder="#" />
-      </span>
-      <button
-        className="btn btn-primary h-[2.2rem] min-h-[2.2rem] mt-auto"
-        onClick={() => {
-          txRequest();
-        }}
-      >
-        {!isConfirmed && isLoading ? (
-          <div className="flex w-[100px] justify-center">
-            <Spinner width="100" height="100"></Spinner>
-          </div>
-        ) : (
-          <div className="flex flex-row w-full">
-            <EnvelopeIcon className="h-4 w-4" />
-            <span className="mx-3"> Send </span>
-          </div>
-        )}
-      </button>
+      <div className="flex flex-col mt-5 items-center">
+        <div className="w-3/4 mb-3">
+          <AddressInput value={to ?? ""} onChange={to => setTo(to)} placeholder="Address Receiver" />
+        </div>
+        <div className="w-3/4 mb-3">
+          <EtherInput value={amount} onChange={amount => setAmount(amount)} placeholder="#" />
+        </div>
+        <div className="w-3/4 mb-5">
+          <button
+            disabled={isLoading}
+            className="btn btn-primary h-[2.2rem] min-h-[2.2rem] mt-auto w-full"
+            onClick={() => {
+              txRequest();
+            }}
+          >
+            {!isConfirmed && isLoading ? (
+              <div className="flex justify-center">
+                <Spinner width="100" height="100"></Spinner>
+              </div>
+            ) : (
+              <div className="flex flex-row">
+                <EnvelopeIcon className="h-4 w-4" />
+                <span className="mx-3"> Send </span>
+              </div>
+            )}
+          </button>
+        </div>
+      </div>
     </>
   );
 };

@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { Tokens } from "./Tokens";
 import { useSharedState } from "~~/sharedStateContext";
 
 export const NetworkMenu = () => {
-  const networks = ["sepolia", "mainnet", "arbitrum"];
+  const networks = ["sepolia", "mainnet", "arbitrum", "optimism"];
   const { selectedChain, setSelectedChain } = useSharedState();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const color = Tokens[String(selectedChain)].color;
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -18,7 +20,12 @@ export const NetworkMenu = () => {
   return (
     <>
       <div className="dropdown">
-        <label tabIndex={0} className="btn m-1" onClick={toggleDropdown}>
+        <label
+          tabIndex={0}
+          className="btn btn-active btn-neutral m-1 w-1/12"
+          onClick={toggleDropdown}
+          style={{ backgroundColor: color }}
+        >
           {selectedChain}
         </label>
         {isDropdownOpen && (

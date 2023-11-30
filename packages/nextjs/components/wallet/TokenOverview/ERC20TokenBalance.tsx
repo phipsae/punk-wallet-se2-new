@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { publicClientSelector } from "./publicClientSelector";
-import { formatEther } from "viem";
+import { publicClientSelector } from "../publicClientSelector";
+import { formatUnits } from "viem";
 import { parseAbi } from "viem";
 import { useSharedState } from "~~/sharedStateContext";
 
@@ -46,7 +46,8 @@ export const ERC20TokenBalance = ({ networkName, tokenAddress, address }: ERC20T
 
   return (
     <>
-      <div>{formatEther(BigInt(balance))}</div>
+      <div>{formatUnits(BigInt(balance), 18).slice(0, 6)}</div>
+      {/* <div>{formatUnits(formatEther(BigInt(balance)), 9)}</div> */}
     </>
   );
 };

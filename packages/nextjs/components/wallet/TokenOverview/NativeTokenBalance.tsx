@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { publicClientSelector } from "./publicClientSelector";
-import { formatEther } from "viem";
+import { publicClientSelector } from "../publicClientSelector";
+import { formatUnits } from "viem";
 import { useSharedState } from "~~/sharedStateContext";
 
 interface NativeTokenBalanceProps {
@@ -29,5 +29,9 @@ export const NativeTokenBalance = ({ address, networkName }: NativeTokenBalanceP
     }
   }, [address, networkName, isConfirmed]);
 
-  return <>{formatEther(balance)}</>;
+  return (
+    <>
+      <span className="text-right">{formatUnits(BigInt(balance), 18).slice(0, 6)}</span>
+    </>
+  );
 };

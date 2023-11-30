@@ -22,7 +22,7 @@ interface TokensType {
 export const Tokens: TokensType = {
   mainnet: {
     name: "ethereum",
-    color: "#ceb0fa",
+    color: "#12100B",
     chainId: 1,
     price: "uniswap",
     // rpcUrl: "https://eth-mainnet.g.alchemy.com/v2/" + ALCHEMY_API_KEY_MAINNET,
@@ -161,10 +161,10 @@ export const Tokens: TokensType = {
   },
   sepolia: {
     name: "sepolia",
-    color: "#50a0ea",
+    color: "#12100B",
     price: "uniswap",
     chainId: 42161,
-    blockExplorer: "https://arbiscan.io/",
+    blockExplorer: "https://sepolia.etherscan.io",
     // rpcUrl: `https://arb-mainnet.g.alchemy.com/v2/tYM-Tr8c9dHV5a8AgvXnVmS9e-xvoxeM`,
     // //gasPrice: 1000000000,// TODO ASK RPC
     erc20Tokens: [

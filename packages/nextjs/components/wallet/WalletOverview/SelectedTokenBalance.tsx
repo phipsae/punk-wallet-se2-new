@@ -1,5 +1,5 @@
-import { ERC20TokenBalance } from "./ERC20TokenBalance";
-import { NativeTokenBalance } from "./NativeTokenBalance";
+import { ERC20TokenBalance } from "../TokenOverview/ERC20TokenBalance";
+import { NativeTokenBalance } from "../TokenOverview/NativeTokenBalance";
 
 interface SelectedTokenBalanceProps {
   address: string;
