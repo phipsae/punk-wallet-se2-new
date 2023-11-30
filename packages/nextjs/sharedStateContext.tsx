@@ -7,6 +7,8 @@ interface SharedStateContextProps {
   setSelectedTokenAddress: (value: string) => void;
   selectedTokenName: string;
   setSelectedTokenName: (value: string) => void;
+  isConfirmed: boolean;
+  setIsConfirmed: (value: boolean) => void;
 }
 
 const SharedStateContext = createContext<SharedStateContextProps | undefined>(undefined);
@@ -15,6 +17,7 @@ export const SharedStateProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [selectedChain, setSelectedChain] = useState<string>("mainnet");
   const [selectedTokenAddress, setSelectedTokenAddress] = useState<string>("nativeToken");
   const [selectedTokenName, setSelectedTokenName] = useState<string>("ETH");
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
 
   return (
     <SharedStateContext.Provider
@@ -25,6 +28,8 @@ export const SharedStateProvider: React.FC<{ children: ReactNode }> = ({ childre
         setSelectedTokenAddress,
         selectedTokenName,
         setSelectedTokenName,
+        isConfirmed,
+        setIsConfirmed,
       }}
     >
       {children}

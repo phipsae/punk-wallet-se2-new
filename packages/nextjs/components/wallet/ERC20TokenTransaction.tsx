@@ -6,6 +6,7 @@ import { parseAbi, parseEther } from "viem";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { Spinner } from "~~/components/assets/Spinner";
 import { AddressInput } from "~~/components/scaffold-eth/Input";
+import { useSharedState } from "~~/sharedStateContext";
 import { notification } from "~~/utils/scaffold-eth";
 
 interface ERC20TokenTransactionProps {
@@ -24,7 +25,8 @@ export const ERC20TokenTransaction = ({ account, tokenAddress, selectedChain }: 
   const [to, setTo] = useState("");
   const [amount, setAmount] = useState("");
   const [isSent, setIsSent] = useState(false);
-  const [isConfirmed, setIsConfirmed] = useState(false);
+  // const [isConfirmed, setIsConfirmed] = useState(false);
+  const { isConfirmed, setIsConfirmed } = useSharedState();
   const [isLoading, setIsLoading] = useState(false);
 
   const walletClient = walletClientSelector(selectedChain, account);

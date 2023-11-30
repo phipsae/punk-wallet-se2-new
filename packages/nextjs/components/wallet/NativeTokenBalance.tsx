@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { publicClientSelector } from "./publicClientSelector";
 import { formatEther } from "viem";
+import { useSharedState } from "~~/sharedStateContext";
 
 interface NativeTokenBalanceProps {
   address: string;
@@ -9,6 +10,7 @@ interface NativeTokenBalanceProps {
 
 export const NativeTokenBalance = ({ address, networkName }: NativeTokenBalanceProps) => {
   const [balance, setBalance] = useState(BigInt(0));
+  const { isConfirmed } = useSharedState();
 
   useEffect(() => {
     const fetchBalance = async () => {
@@ -21,8 +23,11 @@ export const NativeTokenBalance = ({ address, networkName }: NativeTokenBalanceP
 
     if (address) {
       fetchBalance();
+      if (isConfirmed) {
+        fetchBalance();
+      }
     }
-  }, [address, networkName]);
+  }, [address, networkName, isConfirmed]);
 
   return <>{formatEther(balance)}</>;
 };

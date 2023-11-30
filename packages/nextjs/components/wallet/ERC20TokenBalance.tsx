@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { publicClientSelector } from "./publicClientSelector";
 import { formatEther } from "viem";
 import { parseAbi } from "viem";
+import { useSharedState } from "~~/sharedStateContext";
 
 interface ERC20TokensProps {
   networkName: string;
@@ -16,6 +17,7 @@ const abi = parseAbi([
 
 export const ERC20TokenBalance = ({ networkName, tokenAddress, address }: ERC20TokensProps) => {
   const [balance, setBalance] = useState(0);
+  const { isConfirmed } = useSharedState();
 
   const publicClient = publicClientSelector(networkName);
 
@@ -37,6 +39,9 @@ export const ERC20TokenBalance = ({ networkName, tokenAddress, address }: ERC20T
 
   useEffect(() => {
     getBalance();
+    if (isConfirmed) {
+      getBalance();
+    }
   });
 
   return (
