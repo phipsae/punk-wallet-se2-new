@@ -2,9 +2,13 @@ import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { Address } from "./scaffold-eth";
+import { AccountSwitcher } from "./wallet/AccountSwitcher/AccountSwitcher";
+import { WalletIcon } from "@heroicons/react/20/solid";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 // import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
+import { useSharedState } from "~~/sharedStateContext";
 
 interface HeaderMenuLink {
   label: string;
@@ -56,6 +60,17 @@ export const Header = () => {
     useCallback(() => setIsDrawerOpen(false), []),
   );
 
+  const { selectedAccount } = useSharedState();
+
+  const openModal = (modalName: string) => {
+    const modal = document.getElementById(modalName) as HTMLDialogElement | null;
+    if (modal) {
+      modal.showModal();
+    } else {
+      console.error("Modal element not found!");
+    }
+  };
+
   return (
     <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-secondary px-0 sm:px-2">
       <div className="navbar-start w-auto lg:w-1/2">
@@ -95,6 +110,15 @@ export const Header = () => {
         </ul>
       </div>
       <div className="navbar-end flex-grow mr-4">
+        <div className="flex flex-row gap-5 items-center">
+          <div>
+            <Address address={selectedAccount?.address} />
+          </div>
+          <button className="btn" onClick={() => openModal("account_switcher")}>
+            <WalletIcon className="h-10 w-10" /> Accounts
+          </button>
+        </div>
+        <AccountSwitcher />
         {/* <RainbowKitCustomConnectButton /> */}
         {/* <FaucetButton /> */}
       </div>
