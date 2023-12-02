@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 import { privateKeyToAccount } from "viem/accounts";
-import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
 import { AccountSwitcher } from "~~/components/wallet/AccountSwitcher/AccountSwitcher";
 import { NetworkMenu } from "~~/components/wallet/NetworkMenu";
 import { TokenOverview } from "~~/components/wallet/TokenOverview/TokenOverview";
@@ -28,11 +27,10 @@ const Wallet: NextPage = () => {
         <button className="btn" onClick={() => openModal("account_switcher")}>
           open modal
         </button>
-        <dialog id="account_switcher" className="modal">
+        <AccountSwitcher />
+        {/* <dialog id="account_switcher" className="modal">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">
-              <AccountSwitcher />
-            </h3>
+            <h3 className="font-bold text-lg"></h3>
             <div className="py-4">
               <div className="flex flex-row items-start gap-5">
                 <div>
@@ -52,7 +50,7 @@ const Wallet: NextPage = () => {
               </form>
             </div>
           </div>
-        </dialog>
+        </dialog> */}
 
         <NetworkMenu />
         <div className="flex flex-row gap-5">
