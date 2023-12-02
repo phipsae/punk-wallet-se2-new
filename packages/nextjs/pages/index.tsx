@@ -1,9 +1,19 @@
+import { useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import type { NextPage } from "next";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { MetaHeader } from "~~/components/MetaHeader";
 
 const Home: NextPage = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/wallet");
+  }, [router]);
+
+  return null;
+
   return (
     <>
       <MetaHeader />
