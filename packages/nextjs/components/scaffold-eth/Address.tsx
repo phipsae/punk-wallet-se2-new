@@ -113,6 +113,7 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
             setTimeout(() => {
               setAddressCopied(false);
             }, 800);
+            navigator.clipboard.writeText(address || "");
           }}
         >
           <DocumentDuplicateIcon

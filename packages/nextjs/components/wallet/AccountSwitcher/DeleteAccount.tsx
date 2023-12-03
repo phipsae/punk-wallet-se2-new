@@ -1,17 +1,21 @@
+import { PrivateKeyAccount } from "viem";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import { Address } from "~~/components/scaffold-eth";
 import { useSharedState } from "~~/sharedStateContext";
 
 interface DeleteAccountProps {
   address: string;
+  setSelectedAccount: (account: PrivateKeyAccount) => void;
 }
 
-export const DeleteAccount = ({ address }: DeleteAccountProps) => {
+export const DeleteAccount = ({ address, setSelectedAccount }: DeleteAccountProps) => {
   const { accounts, setAccounts } = useSharedState();
 
   const deleteAccount = (address: string) => {
     const filteredAccounts = accounts.filter(acc => acc.account.address !== address);
     setAccounts(filteredAccounts);
+    console.log(filteredAccounts[0].account);
+    setSelectedAccount(filteredAccounts[0].account);
   };
   return (
     <>

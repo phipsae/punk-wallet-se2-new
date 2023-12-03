@@ -19,37 +19,34 @@ export const AddressPrivateKey = ({ address, disableAddressLink, format, size = 
   }
 
   return (
-    <>
-      <div className="flex items-center">
-        {disableAddressLink ? (
-          <span className={`ml-1.5 text-${size} font-normal`}>{displayAddress}</span>
-        ) : (
-          <div className="ml-1.5 font-normal">{displayAddress}</div>
-        )}
-        {addressCopied ? (
-          <CheckCircleIcon
+    <div className="flex items-center">
+      {disableAddressLink ? (
+        <span className={`ml-1.5 text-${size} font-normal`}>{displayAddress}</span>
+      ) : (
+        <div className="ml-1.5 font-normal">{displayAddress}</div>
+      )}
+      {addressCopied ? (
+        <CheckCircleIcon
+          className="ml-1.5 text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
+          aria-hidden="true"
+        />
+      ) : (
+        <CopyToClipboard
+          text={address || ""}
+          onCopy={() => {
+            setAddressCopied(true);
+            setTimeout(() => {
+              setAddressCopied(false);
+            }, 800);
+            navigator.clipboard.writeText(address || "");
+          }}
+        >
+          <DocumentDuplicateIcon
             className="ml-1.5 text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
             aria-hidden="true"
           />
-        ) : (
-          address && (
-            <CopyToClipboard
-              text={address}
-              onCopy={() => {
-                setAddressCopied(true);
-                setTimeout(() => {
-                  setAddressCopied(false);
-                }, 800);
-              }}
-            >
-              <DocumentDuplicateIcon
-                className="ml-1.5 text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
-                aria-hidden="true"
-              />
-            </CopyToClipboard>
-          )
-        )}
-      </div>
-    </>
+        </CopyToClipboard>
+      )}
+    </div>
   );
 };

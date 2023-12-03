@@ -114,6 +114,7 @@ export const AddressAdapted = ({ address, disableAddressLink, format, size = "ba
               setTimeout(() => {
                 setAddressCopied(false);
               }, 800);
+              navigator.clipboard.writeText(address || "");
             }}
           >
             <DocumentDuplicateIcon
