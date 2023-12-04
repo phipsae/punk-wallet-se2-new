@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { ERC20TokenTransaction } from "./ERC20TokenTransaction";
 import { NativeTokenTransaction } from "./NativeTokenTransaction";
 
@@ -5,9 +6,19 @@ interface SelectedTokenTransactionProps {
   account: any;
   networkName: string;
   tokenAddress: string;
+  refreshCount: number;
 }
 
-export const SelectedTokenTransaction = ({ account, networkName, tokenAddress }: SelectedTokenTransactionProps) => {
+export const SelectedTokenTransaction = ({
+  account,
+  networkName,
+  tokenAddress,
+  refreshCount,
+}: SelectedTokenTransactionProps) => {
+  useEffect(() => {
+    // Code to refresh the component data
+  }, [refreshCount]); // Dependency on refreshCount
+
   return (
     <>
       {tokenAddress === "nativeToken" ? (

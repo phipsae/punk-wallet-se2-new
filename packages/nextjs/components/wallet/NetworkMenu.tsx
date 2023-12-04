@@ -19,10 +19,10 @@ export const NetworkMenu = () => {
 
   return (
     <>
-      <div className="dropdown">
+      <div className="dropdown w-full">
         <label
           tabIndex={0}
-          className="btn btn-active btn-neutral m-1 w-1/12"
+          className="btn btn-active btn-neutral m-1 w-full"
           onClick={toggleDropdown}
           style={{ backgroundColor: color }}
         >

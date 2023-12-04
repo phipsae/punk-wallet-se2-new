@@ -8,9 +8,10 @@ import { useSharedState } from "~~/sharedStateContext";
 interface TokenOverviewProps {
   networkName: string;
   address: string;
+  refreshCount: number;
 }
 
-export const TokenOverview = ({ networkName, address }: TokenOverviewProps) => {
+export const TokenOverview = ({ networkName, address, refreshCount }: TokenOverviewProps) => {
   const erc20Tokens = Tokens[String(networkName)].erc20Tokens;
   const nativeToken = Tokens[String(networkName)].nativeToken;
   const blockExplorer = Tokens[String(networkName)].blockExplorer;
@@ -43,6 +44,9 @@ export const TokenOverview = ({ networkName, address }: TokenOverviewProps) => {
     setSelectedBlockExplorer,
     blockExplorer,
   ]);
+  useEffect(() => {
+    // Code to refresh the component data
+  }, [refreshCount]); // Dependency on refreshCount
 
   return (
     <>
@@ -84,7 +88,7 @@ export const TokenOverview = ({ networkName, address }: TokenOverviewProps) => {
                 </td>
                 <td className="w-2/5">
                   <div className="font-bold">
-                    <NativeTokenBalance address={address} networkName={networkName} />
+                    <NativeTokenBalance address={address} networkName={networkName} refreshCount={refreshCount} />
                   </div>
                 </td>
               </tr>
@@ -113,7 +117,12 @@ export const TokenOverview = ({ networkName, address }: TokenOverviewProps) => {
                   </td>
                   <td className="w-2/5">
                     <div className="font-bold">
-                      <ERC20TokenBalance networkName={networkName} tokenAddress={token.address} address={address} />
+                      <ERC20TokenBalance
+                        networkName={networkName}
+                        tokenAddress={token.address}
+                        address={address}
+                        refreshCount={refreshCount}
+                      />
                     </div>
                   </td>
                 </tr>

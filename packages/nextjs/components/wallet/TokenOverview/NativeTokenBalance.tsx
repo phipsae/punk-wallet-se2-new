@@ -6,9 +6,10 @@ import { useSharedState } from "~~/sharedStateContext";
 interface NativeTokenBalanceProps {
   address: string;
   networkName: string;
+  refreshCount: number;
 }
 
-export const NativeTokenBalance = ({ address, networkName }: NativeTokenBalanceProps) => {
+export const NativeTokenBalance = ({ address, networkName, refreshCount }: NativeTokenBalanceProps) => {
   const [balance, setBalance] = useState(BigInt(0));
   const { isConfirmed } = useSharedState();
 
@@ -19,15 +20,15 @@ export const NativeTokenBalance = ({ address, networkName }: NativeTokenBalanceP
         const fetchedBalance = await publicClient.getBalance({ address });
         setBalance(fetchedBalance);
       }
+      console.log(refreshCount);
     };
-
     if (address) {
       fetchBalance();
       if (isConfirmed) {
         fetchBalance();
       }
     }
-  }, [address, networkName, isConfirmed]);
+  }, [address, networkName, isConfirmed, refreshCount]);
 
   return (
     <>
