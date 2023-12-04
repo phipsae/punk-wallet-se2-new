@@ -25,18 +25,23 @@ export const NativeTokenTransaction = ({ account, selectedChain }: NativeTokenTr
 
   const txRequest = async () => {
     if (walletClient && publicClient) {
-      const transaction = await walletClient.sendTransaction({
-        to: to,
-        value: parseEther(amount),
-      });
-      console.log(transaction);
-      setIsSent(true);
-      setIsLoading(true);
+      try {
+        const transaction = await walletClient.sendTransaction({
+          to: to,
+          value: parseEther(amount),
+        });
+        console.log(transaction);
+        setIsSent(true);
+        setIsLoading(true);
 
-      const tx = await publicClient.waitForTransactionReceipt({ hash: transaction });
-      if (tx.status === "success") {
-        setIsConfirmed(true);
-        setIsLoading(false);
+        const tx = await publicClient.waitForTransactionReceipt({ hash: transaction });
+        if (tx.status === "success") {
+          setIsConfirmed(true);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+        notification.error("Not sufficient funds");
       }
     }
   };

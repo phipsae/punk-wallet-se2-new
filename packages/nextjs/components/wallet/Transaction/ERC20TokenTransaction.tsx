@@ -34,39 +34,31 @@ export const ERC20TokenTransaction = ({ account, tokenAddress, selectedChain }: 
 
   const txRequest = async () => {
     if (publicClient && walletClient) {
-      const response = await publicClient.simulateContract({
-        account: account,
-        address: tokenAddress,
-        abi: abi,
-        functionName: "transfer",
-        args: [to, parseEther(amount)],
-      });
+      try {
+        const response = await publicClient.simulateContract({
+          account: account,
+          address: tokenAddress,
+          abi: abi,
+          functionName: "transfer",
+          args: [to, parseEther(amount)],
+        });
 
-      const requestAny: any = response.request;
-      console.log(requestAny);
-      const txHash = await walletClient.writeContract(requestAny);
-      setIsSent(true);
-      setIsLoading(true);
-      console.log(txHash);
+        const requestAny: any = response.request;
+        console.log(requestAny);
+        const txHash = await walletClient.writeContract(requestAny);
+        setIsSent(true);
+        setIsLoading(true);
+        console.log(txHash);
 
-      const tx = await publicClient.waitForTransactionReceipt({ hash: txHash });
-      if (tx.status === "success") {
-        setIsConfirmed(true);
-        setIsLoading(false);
+        const tx = await publicClient.waitForTransactionReceipt({ hash: txHash });
+        if (tx.status === "success") {
+          setIsConfirmed(true);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+        notification.error("Not sufficient funds");
       }
-
-      // const unwatch = publicClient.watchContractEvent({
-      //   address: tokenAddress,
-      //   abi: abi,
-      //   eventName: "Transfer",
-      //   args: { from: account.address },
-      //   onLogs: logs => {
-      //     console.log(logs);
-      //     setIsConfirmed(true);
-      //     setIsLoading(false);
-      //   },
-      // });
-      // console.log(unwatch);
     }
   };
 
