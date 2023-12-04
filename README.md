@@ -7,7 +7,7 @@ Missing features:
 - WalletConnect and MetaMask Connect not implementend yet
 - Other small things (transaction history, etc.)
 
-![Create Multi Sig Wallet tab](https://github.com/phipsae/punk-wallet-se2-new/packages/nextjs/public/PW_SE2_overview.png)
+![Punk Wallet Overview](https://github.com/phipsae/punk-wallet-se2-new/blob/main//packages/nextjs/public/PW_SE2_overview.png)
 
 # 🏗 Scaffold-ETH 2
 
