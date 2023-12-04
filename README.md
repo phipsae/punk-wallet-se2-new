@@ -1,3 +1,14 @@
+# Punk Wallet SE2
+
+First version of [punk wallet](https://punkwallet.io/) built with Scaffold-ETH 2.
+Missing features:
+
+- Persistent of data, once the page is refreshed the accounts are gone
+- WalletConnect and MetaMask Connect not implementend yet
+- Other small things (transaction history, etc.)
+
+![Create Multi Sig Wallet tab](https://github.com/phipsae/multi-sig-wallet-new/blob/main/packages/nextjs/components/assets/imagesReadMe/createContractTab.png)
+
 # 🏗 Scaffold-ETH 2
 
 <h4 align="center">
