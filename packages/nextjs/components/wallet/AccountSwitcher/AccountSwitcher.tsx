@@ -10,42 +10,24 @@ import { AddressPrivateKey } from "~~/components/scaffold-eth/AddressPrivateKey"
 export const AccountSwitcher = () => {
   const [showPrivateKey, setShowPrivateKey] = useState(false);
   const [isImportAccount, setIsImportAccount] = useState(false);
-  const [privateKeys, setPrivateKeys] = useState<string[]>(() => {
-    if (typeof window !== "undefined") {
-      const storedKeys = localStorage.getItem("storedPrivateKeys");
-      try {
-        return storedKeys ? JSON.parse(storedKeys) : [];
-      } catch (error) {
-        console.error("Error parsing stored private keys: ", error);
-        return [];
-      }
-    }
-    return [];
-  });
-  const [selectedPrivateKey, setSelectedPrivateKey] = useState<string>(() => {
-    if (typeof window !== "undefined") {
-      const storedPrivateKey = localStorage.getItem("storedPrivateKey");
-      try {
-        return storedPrivateKey ? JSON.parse(storedPrivateKey) : [];
-      } catch (error) {
-        console.error("Error parsing stored private keys: ", error);
-        return [];
-      }
-    }
-    return [];
-  });
+  const [privateKeys, setPrivateKeys] = useState<string[]>([]);
+  const [selectedPrivateKey, setSelectedPrivateKey] = useState<string>("");
 
   const generateAccount = useCallback(() => {
     const newAccount = generatePrivateKey();
     const updatedPrivateKeys = [...privateKeys, newAccount];
     setPrivateKeys(updatedPrivateKeys);
-    localStorage.setItem("storedPrivateKeys", JSON.stringify(updatedPrivateKeys));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("storedPrivateKeys", JSON.stringify(updatedPrivateKeys));
+    }
     return newAccount;
   }, [privateKeys]);
 
   const handleRowClick = (account: string) => {
     setSelectedPrivateKey(account);
-    localStorage.setItem("storedPrivateKey", JSON.stringify(account));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("storedPrivateKey", JSON.stringify(account));
+    }
   };
 
   const togglePrivateKey = () => {
@@ -57,16 +39,27 @@ export const AccountSwitcher = () => {
   };
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedKeys = localStorage.getItem("storedPrivateKeys");
+      const storedPrivateKey = localStorage.getItem("storedPrivateKey");
+      try {
+        setPrivateKeys(storedKeys ? JSON.parse(storedKeys) : []);
+        setSelectedPrivateKey(storedPrivateKey ? JSON.parse(storedPrivateKey) : "");
+      } catch (error) {
+        console.error("Error parsing stored keys: ", error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (privateKeys.length === 0) {
       // Generate the initial account
 
       const initialAccount = generateAccount();
-      // Set the initial account as the selected account
       setSelectedPrivateKey(initialAccount);
-      localStorage.setItem("selectedPrivateKey", JSON.stringify(initialAccount));
-
-      // Set the private key of the initial account
-      // setRevealedPrivateKey(initialPrivateKey);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("selectedPrivateKey", JSON.stringify(initialAccount));
+      }
     }
   }, [generateAccount, privateKeys]); // Dependency array includes 'accounts'
 
@@ -87,24 +80,22 @@ export const AccountSwitcher = () => {
   return (
     <>
       <dialog
-        id="account_switcher_2"
+        id="account_switcher"
         className="z-1 modal fixed top-10 mx-auto left-0 right-0 overflow-y-auto max-h-[80vh]"
       >
         <div className="modal-box z-1">
           <div className="text-center mb-5">
-            <span className="block text-2xl font-bold">💳 Accounts2222</span>
+            <span className="block text-2xl font-bold">💳 Accounts</span>
           </div>
-          <button
-            onClick={() => {
-              console.log("privateKey from Button", selectedPrivateKey);
-            }}
-          >
-            {" "}
-            Click Me{" "}
-          </button>
+
           <div className="content-wrapper min-h-[480px] max-h-[480px] overflow-auto">
             {isImportAccount ? (
-              <ImportAccount onClose={toggleImportAccount} />
+              <ImportAccount
+                onClose={toggleImportAccount}
+                privateKeys={privateKeys}
+                setSelectedPrivateKey={setSelectedPrivateKey}
+                setPrivateKeys={setPrivateKeys}
+              />
             ) : (
               <div>
                 <div className="overflow-x-auto">

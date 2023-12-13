@@ -1,14 +1,14 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Address } from "./scaffold-eth";
+import { AddressAdapted } from "./scaffold-eth/AddressAdapted";
 import { AccountSwitcher } from "./wallet/AccountSwitcher/AccountSwitcher";
+import { privateKeyToAccount } from "viem/accounts";
 import { WalletIcon } from "@heroicons/react/20/solid";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 // import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
-import { useSharedState } from "~~/sharedStateContext";
 
 interface HeaderMenuLink {
   label: string;
@@ -60,7 +60,18 @@ export const Header = () => {
     useCallback(() => setIsDrawerOpen(false), []),
   );
 
-  const { selectedAccount } = useSharedState();
+  const [selectedPrivateKey, setSelectedPrivateKey] = useState<string>("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedPrivateKey = localStorage.getItem("storedPrivateKey");
+      try {
+        setSelectedPrivateKey(storedPrivateKey ? JSON.parse(storedPrivateKey) : "");
+      } catch (error) {
+        console.error("Error parsing stored keys: ", error);
+      }
+    }
+  }, []);
 
   const openModal = (modalName: string) => {
     const modal = document.getElementById(modalName) as HTMLDialogElement | null;
@@ -111,14 +122,16 @@ export const Header = () => {
       </div>
       <div className="navbar-end flex-grow mr-4">
         <div className="flex flex-row gap-5 items-center">
-          <div>
-            <Address address={selectedAccount?.address} />
-          </div>
+          {selectedPrivateKey && (
+            <div>
+              <AddressAdapted
+                address={privateKeyToAccount(selectedPrivateKey as `0x${string}`).address}
+                format="short"
+              />
+            </div>
+          )}
           <button className="btn" onClick={() => openModal("account_switcher")}>
             <WalletIcon className="h-10 w-10" /> Accounts
-          </button>
-          <button className="btn" onClick={() => openModal("account_switcher_2")}>
-            <WalletIcon className="h-10 w-10" /> Accounts222
           </button>
         </div>
         <AccountSwitcher />

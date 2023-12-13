@@ -1,45 +1,34 @@
 import { useEffect, useState } from "react";
-import { PrivateKeyAccount, privateKeyToAccount } from "viem/accounts";
 import { ArrowUturnLeftIcon } from "@heroicons/react/20/solid";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { PrivateKeyInput } from "~~/components/scaffold-eth/Input/PrivateKeyInput";
-import { useSharedState } from "~~/sharedStateContext";
 import { notification } from "~~/utils/scaffold-eth";
-
-interface AccountWithPrivateKey {
-  account: PrivateKeyAccount;
-  privateKey: string;
-}
 
 interface ImportAccountProps {
   onClose: any;
+  privateKeys: string[];
+  setSelectedPrivateKey: (selectedPrivateKey: string) => void;
+  setPrivateKeys: (privateKeys: string[]) => void;
 }
 
-export const ImportAccount = ({ onClose }: ImportAccountProps) => {
-  const { accounts, setAccounts } = useSharedState();
+export const ImportAccount = ({ onClose, privateKeys, setPrivateKeys, setSelectedPrivateKey }: ImportAccountProps) => {
   const [privateKey, setPrivateKey] = useState("");
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState("");
 
   const generateAccount = (privateKey: string) => {
     try {
-      const newAccount = privateKeyToAccount(privateKey as `0x${string}`);
-
-      const accountExists = accounts.some(account => account.account.address === newAccount.address);
+      const accountExists = privateKeys.some(pKey => pKey === privateKey);
       if (accountExists) {
         setIsError(true);
         setError("Account already exists");
         return;
       }
-
-      const newAccountWithKey: AccountWithPrivateKey = {
-        account: newAccount,
-        privateKey: privateKey,
-      };
-      setAccounts([...accounts, newAccountWithKey]);
+      setPrivateKeys([...privateKeys, privateKey]);
+      setSelectedPrivateKey(privateKey);
       onClose();
       notification.success("Account succesfully added");
-      return newAccountWithKey;
+      return privateKey;
     } catch (error) {
       setIsError(true);
       setError("Wrong format");

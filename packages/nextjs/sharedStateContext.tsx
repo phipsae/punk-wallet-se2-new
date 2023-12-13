@@ -1,5 +1,4 @@
 import { ReactNode, createContext, useContext, useState } from "react";
-import { PrivateKeyAccount } from "viem";
 
 interface SharedStateContextProps {
   selectedChain: string;
@@ -14,10 +13,6 @@ interface SharedStateContextProps {
   setSelectedBlockExplorer: (value: string) => void;
   isConfirmed: boolean;
   setIsConfirmed: (value: boolean) => void;
-  accounts: AccountWithPrivateKey[];
-  setAccounts: (value: AccountWithPrivateKey[]) => void;
-  selectedAccount: PrivateKeyAccount | undefined;
-  setSelectedAccount: (value: PrivateKeyAccount) => void;
 }
 
 const SharedStateContext = createContext<SharedStateContextProps | undefined>(undefined);
@@ -29,8 +24,6 @@ export const SharedStateProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [selectedTokenImage, setSelectedTokenImage] = useState<string>("/ETH.png");
   const [selectedBlockExplorer, setSelectedBlockExplorer] = useState<string>("https://etherscan.io/");
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
-  const [accounts, setAccounts] = useState<AccountWithPrivateKey[]>([]);
-  const [selectedAccount, setSelectedAccount] = useState<PrivateKeyAccount>();
 
   return (
     <SharedStateContext.Provider
@@ -47,10 +40,6 @@ export const SharedStateProvider: React.FC<{ children: ReactNode }> = ({ childre
         setSelectedTokenImage,
         selectedBlockExplorer,
         setSelectedBlockExplorer,
-        accounts,
-        setAccounts,
-        selectedAccount,
-        setSelectedAccount,
       }}
     >
       {children}
@@ -65,8 +54,3 @@ export const useSharedState = () => {
   }
   return context;
 };
-
-interface AccountWithPrivateKey {
-  account: PrivateKeyAccount;
-  privateKey: string;
-}
