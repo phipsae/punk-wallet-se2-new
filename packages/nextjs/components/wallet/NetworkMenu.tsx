@@ -13,6 +13,9 @@ export const NetworkMenu = () => {
   };
 
   const handleNetworkSelect = (selectedChain: string) => {
+    // if (typeof window !== "undefined") {
+    //   localStorage.setItem("selectedChain", selectedChain);
+    // }
     setSelectedChain(selectedChain);
     setIsDropdownOpen(false);
   };

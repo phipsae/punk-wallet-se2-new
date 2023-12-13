@@ -61,7 +61,6 @@ export const AddressAdapted = ({ address, disableAddressLink, format, size = "ba
     );
   }
 
-  console.log("address", selectedBlockExplorer);
   if (!isAddress(address)) {
     return <span className="text-error">Wrong address</span>;
   }

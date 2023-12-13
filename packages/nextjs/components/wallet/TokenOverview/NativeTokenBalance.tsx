@@ -20,7 +20,7 @@ export const NativeTokenBalance = ({ address, networkName, refreshCount }: Nativ
         const fetchedBalance = await publicClient.getBalance({ address });
         setBalance(fetchedBalance);
       }
-      console.log(refreshCount);
+      console.log("Refresh Count", refreshCount);
     };
     if (address) {
       fetchBalance();

@@ -117,6 +117,9 @@ export const Header = () => {
           <button className="btn" onClick={() => openModal("account_switcher")}>
             <WalletIcon className="h-10 w-10" /> Accounts
           </button>
+          <button className="btn" onClick={() => openModal("account_switcher_2")}>
+            <WalletIcon className="h-10 w-10" /> Accounts222
+          </button>
         </div>
         <AccountSwitcher />
         {/* <RainbowKitCustomConnectButton /> */}
