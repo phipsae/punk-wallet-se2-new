@@ -53,10 +53,10 @@ export const AccountSwitcher = () => {
         const parsedStoredPrivateKey = storedPrivateKey ? JSON.parse(storedPrivateKey) : "";
 
         if (parsedStoredKeys.length > 0) {
-          setPrivateKeys(parsedStoredKeys);
+          // setPrivateKeys(parsedStoredKeys);
         } else {
-          const initialAccount = generateAccount();
-          setSelectedPrivateKey(initialAccount);
+          generateAccount();
+          // setSelectedPrivateKey(initialAccount);
         }
 
         setSelectedPrivateKey(parsedStoredPrivateKey || selectedPrivateKey);
@@ -64,7 +64,7 @@ export const AccountSwitcher = () => {
         console.error("Error parsing stored keys: ", error);
       }
     }
-  });
+  }, [selectedPrivateKey, generateAccount, setSelectedPrivateKey, setPrivateKeys]);
 
   useEffect(() => {
     setShowPrivateKey(false);
