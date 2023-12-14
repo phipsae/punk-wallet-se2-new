@@ -6,27 +6,32 @@ import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { AddressAdapted } from "~~/components/scaffold-eth/AddressAdapted";
 import { AddressPrivateKey } from "~~/components/scaffold-eth/AddressPrivateKey";
+import { useSharedState } from "~~/sharedStateContext";
 
 export const AccountSwitcher = () => {
   const [showPrivateKey, setShowPrivateKey] = useState(false);
   const [isImportAccount, setIsImportAccount] = useState(false);
-  const [privateKeys, setPrivateKeys] = useState<string[]>([]);
-  const [selectedPrivateKey, setSelectedPrivateKey] = useState<string>("");
+  // const [privateKeys, setPrivateKeys] = useState<string[]>([]);
+  // const [selectedPrivateKey, setSelectedPrivateKey] = useState<string>("");
+  const { selectedPrivateKey, setSelectedPrivateKey } = useSharedState();
+  const { privateKeys, setPrivateKeys } = useSharedState();
 
   const generateAccount = useCallback(() => {
     const newAccount = generatePrivateKey();
     const updatedPrivateKeys = [...privateKeys, newAccount];
     setPrivateKeys(updatedPrivateKeys);
+    setSelectedPrivateKey(newAccount);
     if (typeof window !== "undefined") {
       localStorage.setItem("storedPrivateKeys", JSON.stringify(updatedPrivateKeys));
+      localStorage.setItem("selectedPrivateKey", JSON.stringify(newAccount));
     }
     return newAccount;
-  }, [privateKeys]);
+  }, [privateKeys, setSelectedPrivateKey, setPrivateKeys]);
 
   const handleRowClick = (account: string) => {
     setSelectedPrivateKey(account);
     if (typeof window !== "undefined") {
-      localStorage.setItem("storedPrivateKey", JSON.stringify(account));
+      localStorage.setItem("selectedPrivateKey", JSON.stringify(account));
     }
   };
 
@@ -41,30 +46,27 @@ export const AccountSwitcher = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedKeys = localStorage.getItem("storedPrivateKeys");
-      const storedPrivateKey = localStorage.getItem("storedPrivateKey");
+      const storedPrivateKey = localStorage.getItem("selectedPrivateKey");
+
       try {
-        setPrivateKeys(storedKeys ? JSON.parse(storedKeys) : []);
-        setSelectedPrivateKey(storedPrivateKey ? JSON.parse(storedPrivateKey) : "");
+        const parsedStoredKeys = storedKeys ? JSON.parse(storedKeys) : [];
+        const parsedStoredPrivateKey = storedPrivateKey ? JSON.parse(storedPrivateKey) : "";
+
+        if (parsedStoredKeys.length > 0) {
+          setPrivateKeys(parsedStoredKeys);
+        } else {
+          const initialAccount = generateAccount();
+          setSelectedPrivateKey(initialAccount);
+        }
+
+        setSelectedPrivateKey(parsedStoredPrivateKey || selectedPrivateKey);
       } catch (error) {
         console.error("Error parsing stored keys: ", error);
       }
     }
-  }, []);
+  });
 
   useEffect(() => {
-    if (privateKeys.length === 0) {
-      // Generate the initial account
-
-      const initialAccount = generateAccount();
-      setSelectedPrivateKey(initialAccount);
-      if (typeof window !== "undefined") {
-        localStorage.setItem("selectedPrivateKey", JSON.stringify(initialAccount));
-      }
-    }
-  }, [generateAccount, privateKeys]); // Dependency array includes 'accounts'
-
-  useEffect(() => {
-    // Set 'showPrivateKey' to false whenever 'selectedAccount' changes
     setShowPrivateKey(false);
   }, [selectedPrivateKey]);
 

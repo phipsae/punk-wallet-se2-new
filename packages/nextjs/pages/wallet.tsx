@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { NextPage } from "next";
 import { privateKeyToAccount } from "viem/accounts";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
@@ -9,22 +9,13 @@ import { WalletOverview } from "~~/components/wallet/WalletOverview/WalletOvervi
 import { useSharedState } from "~~/sharedStateContext";
 
 const Wallet: NextPage = () => {
-  const [selectedPrivateKey, setSelectedPrivateKey] = useState<string>("");
+  // const [selectedPrivateKey, setSelectedPrivateKey] = useState<string>("");
+  const { selectedPrivateKey } = useSharedState();
+  /* const account = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PRIVATE_KEY_WALLET}`); */
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedPrivateKey = localStorage.getItem("storedPrivateKey");
-      try {
-        setSelectedPrivateKey(storedPrivateKey ? JSON.parse(storedPrivateKey) : "");
-      } catch (error) {
-        console.error("Error parsing stored keys: ", error);
-      }
-    }
-  }, []);
-  // const account = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PRIVATE_KEY_WALLET}`);
   let account;
 
-  if (selectedPrivateKey) {
+  if (selectedPrivateKey !== "") {
     account = privateKeyToAccount(selectedPrivateKey as `0x${string}`);
   }
   const { selectedChain, selectedTokenAddress, selectedTokenName, selectedTokenImage } = useSharedState();
@@ -37,14 +28,6 @@ const Wallet: NextPage = () => {
 
   return (
     <>
-      <button
-        onClick={() => {
-          console.log(selectedPrivateKey);
-        }}
-      >
-        {" "}
-        Click Me
-      </button>
       <div className="container mx-auto flex flex-col mt-5">
         <div className="flex flex-row gap-5 items-center">
           <div className="w-1/12">
@@ -57,7 +40,7 @@ const Wallet: NextPage = () => {
           </div>
         </div>
         <div className="flex flex-row gap-5">
-          {account && (
+          {account && selectedPrivateKey && (
             <div className="flex flex-col flex-1 mt-5 border p-5">
               <WalletOverview
                 account={account}

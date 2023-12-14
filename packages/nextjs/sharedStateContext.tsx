@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext, useState } from "react";
+import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 
 interface SharedStateContextProps {
   selectedChain: string;
@@ -13,6 +13,10 @@ interface SharedStateContextProps {
   setSelectedBlockExplorer: (value: string) => void;
   isConfirmed: boolean;
   setIsConfirmed: (value: boolean) => void;
+  selectedPrivateKey: string;
+  setSelectedPrivateKey: (value: string) => void;
+  privateKeys: string[];
+  setPrivateKeys: (value: string[]) => void;
 }
 
 const SharedStateContext = createContext<SharedStateContextProps | undefined>(undefined);
@@ -24,6 +28,22 @@ export const SharedStateProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [selectedTokenImage, setSelectedTokenImage] = useState<string>("/ETH.png");
   const [selectedBlockExplorer, setSelectedBlockExplorer] = useState<string>("https://etherscan.io/");
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
+  const [selectedPrivateKey, setSelectedPrivateKey] = useState<string>("");
+  const [privateKeys, setPrivateKeys] = useState<string[]>([]);
+
+  // to retrieve private keys from storage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedPrivateKey = localStorage.getItem("selectedPrivateKey");
+      const storedKeys = localStorage.getItem("storedPrivateKeys");
+      try {
+        setPrivateKeys(storedKeys ? JSON.parse(storedKeys) : []);
+        setSelectedPrivateKey(storedPrivateKey ? JSON.parse(storedPrivateKey) : "");
+      } catch (error) {
+        console.error("Error parsing stored keys: ", error);
+      }
+    }
+  }, []);
 
   return (
     <SharedStateContext.Provider
@@ -40,6 +60,10 @@ export const SharedStateProvider: React.FC<{ children: ReactNode }> = ({ childre
         setSelectedTokenImage,
         selectedBlockExplorer,
         setSelectedBlockExplorer,
+        selectedPrivateKey,
+        setSelectedPrivateKey,
+        privateKeys,
+        setPrivateKeys,
       }}
     >
       {children}
