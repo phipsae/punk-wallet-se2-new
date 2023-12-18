@@ -45,17 +45,6 @@ const Wallet: NextPage = () => {
     };
   }, [isRainbow, selectedPrivateKey]);
 
-  // if (isRainbow) {
-  //   account = getAccount();
-  //   console.log("MEtamask Address:", account.address);
-  // } else {
-  //   account = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PRIVATE_KEY_WALLET}`);
-  //   if (selectedPrivateKey !== "") {
-  //     account = privateKeyToAccount(selectedPrivateKey as `0x${string}`);
-  //     console.log("PW Address", account.address);
-  //   }
-  // }
-
   const refreshComponents = () => {
     setRefreshCount(prevCount => prevCount + 1);
   };
@@ -71,6 +60,7 @@ const Wallet: NextPage = () => {
         {" "}
         Click Me
       </button>
+
       {account && <Address address={account.address} />}
       {account && <Balance address={account.address} />}
 
