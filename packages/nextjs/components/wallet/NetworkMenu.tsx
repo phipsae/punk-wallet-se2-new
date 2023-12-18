@@ -43,7 +43,7 @@ export const NetworkMenu = () => {
       scaffoldConfig.targetNetwork = networkMappings[storedChainName];
       setSelectedChain(storedChainName);
     }
-  }, []);
+  });
 
   return (
     <>
