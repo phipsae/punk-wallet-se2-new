@@ -20,11 +20,17 @@ export const NativeTokenTransaction = ({ account, selectedChain }: NativeTokenTr
   const [isLoading, setIsLoading] = useState(false);
   const [isSent, setIsSent] = useState(false);
 
+  console.log("Chain from Native TOken", selectedChain);
+
   const walletClient = walletClientSelector(selectedChain, account);
   const publicClient = publicClientSelector(selectedChain);
 
   const txRequest = async () => {
     if (walletClient && publicClient) {
+      console.log("Wallet Client from Native TOken", walletClient);
+      console.log("Wallet Client from Native TOken", publicClient);
+      console.log("Account from Native TOken", account);
+      console.log("Chain from Native TOken", selectedChain);
       try {
         const transaction = await walletClient.sendTransaction({
           to: to,

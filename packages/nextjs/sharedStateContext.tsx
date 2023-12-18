@@ -17,6 +17,8 @@ interface SharedStateContextProps {
   setSelectedPrivateKey: (value: string) => void;
   privateKeys: string[];
   setPrivateKeys: (value: string[]) => void;
+  isRainbow: boolean;
+  setIsRainbow: (value: boolean) => void;
 }
 
 const SharedStateContext = createContext<SharedStateContextProps | undefined>(undefined);
@@ -30,15 +32,20 @@ export const SharedStateProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const [selectedPrivateKey, setSelectedPrivateKey] = useState<string>("");
   const [privateKeys, setPrivateKeys] = useState<string[]>([]);
+  const [isRainbow, setIsRainbow] = useState<boolean>(false);
 
   // to retrieve private keys from storage
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedPrivateKey = localStorage.getItem("selectedPrivateKey");
       const storedKeys = localStorage.getItem("storedPrivateKeys");
+      const storedChain = localStorage.getItem("selectedChain");
+      // const storedRainbow = localStorage.getItem("isRainbow");
       try {
-        setPrivateKeys(storedKeys ? JSON.parse(storedKeys) : []);
         setSelectedPrivateKey(storedPrivateKey ? JSON.parse(storedPrivateKey) : "");
+        setSelectedChain(storedChain ? JSON.parse(storedChain) : "");
+        setPrivateKeys(storedKeys ? JSON.parse(storedKeys) : []);
+        // setIsRainbow(storedRainbow ? JSON.parse(storedRainbow) : false);
       } catch (error) {
         console.error("Error parsing stored keys: ", error);
       }
@@ -64,6 +71,8 @@ export const SharedStateProvider: React.FC<{ children: ReactNode }> = ({ childre
         setSelectedPrivateKey,
         privateKeys,
         setPrivateKeys,
+        isRainbow,
+        setIsRainbow,
       }}
     >
       {children}

@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tokens } from "./Tokens";
+import * as chains from "viem/chains";
+import scaffoldConfig from "~~/scaffold.config";
 import { useSharedState } from "~~/sharedStateContext";
 
 export const NetworkMenu = () => {
@@ -8,17 +10,40 @@ export const NetworkMenu = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const color = Tokens[String(selectedChain)].color;
 
+  const networkMappings: any = {
+    sepolia: chains.sepolia,
+    mainnet: chains.mainnet,
+    arbitrum: chains.arbitrum,
+    optimism: chains.optimism,
+  };
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleNetworkSelect = (selectedChain: string) => {
-    // if (typeof window !== "undefined") {
-    //   localStorage.setItem("selectedChain", selectedChain);
-    // }
-    setSelectedChain(selectedChain);
-    setIsDropdownOpen(false);
+  const handleNetworkSelect = (selectedNetworkName: string) => {
+    const selectedNetworkConfig = networkMappings[selectedNetworkName];
+    if (selectedNetworkConfig) {
+      scaffoldConfig.targetNetwork = selectedNetworkConfig;
+      setSelectedChain(selectedNetworkName);
+      setIsDropdownOpen(false);
+
+      // Save to localStorage
+      if (typeof window !== "undefined") {
+        localStorage.setItem("selectedChain", selectedNetworkName);
+      }
+    } else {
+      console.error("Selected network configuration not found");
+    }
   };
+
+  useEffect(() => {
+    const storedChainName = localStorage.getItem("selectedChain");
+    if (storedChainName && networkMappings[storedChainName]) {
+      scaffoldConfig.targetNetwork = networkMappings[storedChainName];
+      setSelectedChain(storedChainName);
+    }
+  }, []);
 
   return (
     <>

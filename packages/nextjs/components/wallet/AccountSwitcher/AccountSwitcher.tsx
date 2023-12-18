@@ -52,19 +52,31 @@ export const AccountSwitcher = () => {
         const parsedStoredKeys = storedKeys ? JSON.parse(storedKeys) : [];
         const parsedStoredPrivateKey = storedPrivateKey ? JSON.parse(storedPrivateKey) : "";
 
-        if (parsedStoredKeys.length > 0) {
-          // setPrivateKeys(parsedStoredKeys);
-        } else {
+        if (parsedStoredKeys.length === 0) {
           generateAccount();
-          // setSelectedPrivateKey(initialAccount);
+        } else {
+          // Update state only if different
+          if (JSON.stringify(parsedStoredKeys) !== JSON.stringify(privateKeys)) {
+            setPrivateKeys(parsedStoredKeys);
+          }
         }
 
-        setSelectedPrivateKey(parsedStoredPrivateKey || selectedPrivateKey);
+        if (parsedStoredPrivateKey && parsedStoredPrivateKey !== selectedPrivateKey) {
+          setSelectedPrivateKey(parsedStoredPrivateKey);
+        }
+
+        // console.log("From Account Switcher", parsedStoredKeys);
+        // if (parsedStoredKeys.length === 0) {
+        //   generateAccount();
+        // } else {
+        //   // setPrivateKeys(parsedStoredKeys);
+        // }
+        // setSelectedPrivateKey(parsedStoredPrivateKey || selectedPrivateKey);
       } catch (error) {
         console.error("Error parsing stored keys: ", error);
       }
     }
-  }, [selectedPrivateKey, generateAccount, setSelectedPrivateKey, setPrivateKeys]);
+  });
 
   useEffect(() => {
     setShowPrivateKey(false);
@@ -89,7 +101,6 @@ export const AccountSwitcher = () => {
           <div className="text-center mb-5">
             <span className="block text-2xl font-bold">💳 Accounts</span>
           </div>
-
           <div className="content-wrapper min-h-[480px] max-h-[480px] overflow-auto">
             {isImportAccount ? (
               <ImportAccount

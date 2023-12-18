@@ -3,11 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { AddressAdapted } from "./scaffold-eth/AddressAdapted";
+import { RainbowKitCustomConnectButtonPW } from "./scaffold-eth/RainbowKitCustomConnectButtonPW";
 import { AccountSwitcher } from "./wallet/AccountSwitcher/AccountSwitcher";
 import { privateKeyToAccount } from "viem/accounts";
 import { WalletIcon } from "@heroicons/react/20/solid";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-// import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { useSharedState } from "~~/sharedStateContext";
 
@@ -61,7 +61,7 @@ export const Header = () => {
     useCallback(() => setIsDrawerOpen(false), []),
   );
 
-  const { selectedPrivateKey } = useSharedState();
+  const { selectedPrivateKey, isRainbow } = useSharedState();
 
   let account;
 
@@ -118,17 +118,19 @@ export const Header = () => {
       </div>
       <div className="navbar-end flex-grow mr-4">
         <div className="flex flex-row gap-5 items-center">
-          {account && (
+          {account && !isRainbow && (
             <div>
               <AddressAdapted address={account.address} format="short" />
             </div>
           )}
-          <button className="btn" onClick={() => openModal("account_switcher")}>
-            <WalletIcon className="h-10 w-10" /> Accounts
-          </button>
+          {!isRainbow && (
+            <button className="btn" onClick={() => openModal("account_switcher")}>
+              <WalletIcon className="h-8 w-8" /> Accounts
+            </button>
+          )}
+          <RainbowKitCustomConnectButtonPW />
         </div>
         <AccountSwitcher />
-        {/* <RainbowKitCustomConnectButton /> */}
         {/* <FaucetButton /> */}
       </div>
     </div>

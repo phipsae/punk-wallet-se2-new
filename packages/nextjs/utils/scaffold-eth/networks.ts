@@ -113,6 +113,6 @@ export function getTargetNetwork(): chains.Chain & Partial<TChainAttributes> {
 
   return {
     ...configuredNetwork,
-    ...NETWORKS_EXTRA_DATA[configuredNetwork.id],
+    ...NETWORKS_EXTRA_DATA[configuredNetwork.id || 1],
   };
 }

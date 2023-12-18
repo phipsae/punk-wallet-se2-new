@@ -9,9 +9,29 @@ export type ScaffoldConfig = {
   walletAutoConnect: boolean;
 };
 
+const networkMappings = {
+  sepolia: chains.sepolia,
+  mainnet: chains.mainnet,
+  arbitrum: chains.arbitrum,
+  optimism: chains.optimism,
+};
+
+type NetworkKey = keyof typeof networkMappings;
+
+let network = chains.mainnet;
+
+if (typeof window !== "undefined" && localStorage.selectedChain) {
+  const selectedChain = localStorage.selectedChain as NetworkKey;
+
+  // @ts-ignore - Ignoring type error for demonstration purposes
+  network = networkMappings[selectedChain];
+  console.log("SE-CONFIG", network);
+  console.log("LS", localStorage);
+}
+
 const scaffoldConfig = {
   // The network where your DApp lives in
-  targetNetwork: chains.hardhat,
+  targetNetwork: network,
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect on the local network
