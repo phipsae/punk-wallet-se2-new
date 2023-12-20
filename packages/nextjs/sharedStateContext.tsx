@@ -43,7 +43,8 @@ export const SharedStateProvider: React.FC<{ children: ReactNode }> = ({ childre
       // const storedRainbow = localStorage.getItem("isRainbow");
       try {
         setSelectedPrivateKey(storedPrivateKey ? JSON.parse(storedPrivateKey) : "");
-        setSelectedChain(storedChain ? JSON.parse(storedChain) : "");
+        // removed the JSON.parse(storedChain)
+        setSelectedChain(storedChain ? storedChain : "");
         setPrivateKeys(storedKeys ? JSON.parse(storedKeys) : []);
         // setIsRainbow(storedRainbow ? JSON.parse(storedRainbow) : false);
       } catch (error) {

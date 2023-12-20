@@ -36,8 +36,7 @@ export const ERC20TokenBalance = ({ networkName, tokenAddress, address, refreshC
         console.log("Refresh Count", refreshCount);
       }
     } catch (error) {
-      console.log(error);
-      console.log("FROM HERE");
+      // console.log(error);
     }
   }, [publicClient, address, tokenAddress, refreshCount]);
 

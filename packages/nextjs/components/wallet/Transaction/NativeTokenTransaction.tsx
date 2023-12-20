@@ -20,8 +20,6 @@ export const NativeTokenTransaction = ({ account, selectedChain }: NativeTokenTr
   const [isLoading, setIsLoading] = useState(false);
   const [isSent, setIsSent] = useState(false);
 
-  console.log("Chain from Native TOken", selectedChain);
-
   const walletClient = walletClientSelector(selectedChain, account);
   const publicClient = publicClientSelector(selectedChain);
 
