@@ -17,7 +17,6 @@ import { burnerWalletConfig } from "~~/services/web3/wagmi-burner/burnerWalletCo
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 const configuredNetwork = getTargetNetwork();
-console.log("getTargetNetwork", configuredNetwork);
 const { onlyLocalBurnerWallet } = scaffoldConfig;
 
 // We always want to have mainnet enabled (ENS resolution, ETH price, etc). But only once.

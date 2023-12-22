@@ -5,7 +5,7 @@ import scaffoldConfig from "~~/scaffold.config";
 import { useSharedState } from "~~/sharedStateContext";
 
 export const NetworkMenu = () => {
-  const networks = ["sepolia", "mainnet", "arbitrum", "optimism"];
+  const networks = ["sepolia", "mainnet", "arbitrum", "optimism", "goerli"];
   const { selectedChain, setSelectedChain } = useSharedState();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const color = Tokens[String(selectedChain)].color;
@@ -15,6 +15,7 @@ export const NetworkMenu = () => {
     mainnet: chains.mainnet,
     arbitrum: chains.arbitrum,
     optimism: chains.optimism,
+    goerli: chains.goerli,
   };
 
   const toggleDropdown = () => {

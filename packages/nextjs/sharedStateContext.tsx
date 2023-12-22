@@ -44,7 +44,7 @@ export const SharedStateProvider: React.FC<{ children: ReactNode }> = ({ childre
       try {
         setSelectedPrivateKey(storedPrivateKey ? JSON.parse(storedPrivateKey) : "");
         // removed the JSON.parse(storedChain)
-        setSelectedChain(storedChain ? storedChain : "");
+        setSelectedChain(storedChain ? JSON.parse(storedChain) : "mainnet");
         setPrivateKeys(storedKeys ? JSON.parse(storedKeys) : []);
         // setIsRainbow(storedRainbow ? JSON.parse(storedRainbow) : false);
       } catch (error) {

@@ -1,5 +1,4 @@
 // import { SignClientTypes } from "@walletconnect/types";
-// import { Button, Image, Modal, StyleSheet, Text, View } from "react-native";
 
 // interface PairingModalProps {
 //   visible: boolean;

@@ -6,10 +6,9 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { NetworkMenu } from "~~/components/wallet/NetworkMenu";
 import { TokenOverview } from "~~/components/wallet/TokenOverview/TokenOverview";
 import { SelectedTokenTransaction } from "~~/components/wallet/Transaction/SelectedTokenTransaction";
+import { WalletConnectDapp } from "~~/components/wallet/WalletConnect/WalletConnectDapp";
 import { WalletOverview } from "~~/components/wallet/WalletOverview/WalletOverview";
 import { useSharedState } from "~~/sharedStateContext";
-
-// let account: any;
 
 const Wallet: NextPage = () => {
   const { selectedPrivateKey, isRainbow } = useSharedState();
@@ -60,6 +59,8 @@ const Wallet: NextPage = () => {
             </button>
           </div>
         </div>
+        <WalletConnectDapp />
+        {/* <OGWalletConnect /> */}
         <div className="flex flex-row gap-5">
           {account && selectedPrivateKey && (
             <div className="flex flex-col flex-1 mt-5 border p-5">

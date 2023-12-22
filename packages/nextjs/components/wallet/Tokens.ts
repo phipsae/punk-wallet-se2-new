@@ -180,4 +180,25 @@ export const Tokens: TokensType = {
       imgSrc: "/ETH.png",
     },
   },
+  goerli: {
+    name: "goerli",
+    color: "#0975F6",
+    price: "uniswap",
+    chainId: 5,
+    // faucet: "https://goerli-faucet.slock.it/",
+    blockExplorer: "https://goerli.etherscan.io/",
+    // rpcUrl: `https://eth-goerli.g.alchemy.com/v2/4vFnzFt4K0gFDvYodzTuH9ZjbGI-awSf`,
+    erc20Tokens: [
+      {
+        name: "tDAI",
+        address: "0x9ef870fDf44fAD7eF6DBcfaA68BeF95025721Bd7",
+        decimals: 18,
+        imgSrc: "/DAI.png",
+      },
+    ],
+    nativeToken: {
+      name: "ETH",
+      imgSrc: "/ETH.png",
+    },
+  },
 };

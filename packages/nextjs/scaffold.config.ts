@@ -14,6 +14,7 @@ const networkMappings = {
   mainnet: chains.mainnet,
   arbitrum: chains.arbitrum,
   optimism: chains.optimism,
+  goerli: chains.goerli,
 };
 
 type NetworkKey = keyof typeof networkMappings;

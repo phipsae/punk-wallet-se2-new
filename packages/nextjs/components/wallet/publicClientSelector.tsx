@@ -21,6 +21,12 @@ export const publicClientSelector = (networkName: string) => {
       transport: http(`https://arb-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`),
     });
     return publicClient;
+  } else if (networkName === "goerli") {
+    const publicClient = createPublicClient({
+      chain: selectedChain,
+      transport: http(`https://eth-goerli.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`),
+    });
+    return publicClient;
   } else if (networkName === "optimism") {
     const publicClient = createPublicClient({
       chain: selectedChain,
