@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { approvedNamespaces, createWeb3wallet, onSessionProposal } from "../OGWCHelpers";
+import { approvedNamespaces, createWeb3wallet, onSessionProposal } from "./OGWCHelpers";
+// import PairingsPage from "./utils/pairings";
 import { getSdkError } from "@walletconnect/utils";
 // import { privateKeyToAccount } from "viem/accounts";
 import { useAccount } from "wagmi";
@@ -7,17 +8,16 @@ import { useAccount } from "wagmi";
 // import { useSharedState } from "~~/sharedStateContext";
 
 export const WalletConnectDapp = () => {
-  // ETHEREUM Wallet connect react app
   // const { selectedChain } = useSharedState();
   const { address } = useAccount();
   const [walletConnectUri, setWalletConnectUri] = useState("");
   const [web3wallet, setWeb3wallet] = useState<any>();
 
   // const [wallectConnectConnector, setWallectConnectConnector] = useState();
-  const [walletConnectConnected, setWalletConnectConnected] = useState<boolean>();
+  const [setWalletConnectConnected] = useState<boolean>();
   // const [walletConnectPeerMeta, setWalletConnectPeerMeta] = useState();
 
-  // Init
+  // Initializes wallet connect wallet
 
   const initWeb3wallet = async () => {
     const web3wallet = await createWeb3wallet();
@@ -36,7 +36,7 @@ export const WalletConnectDapp = () => {
     setWeb3wallet(web3wallet);
   };
 
-  // Pair
+  // Pair with dapp via wcUri
 
   const [session1, setSession1] = useState();
 
@@ -51,11 +51,15 @@ export const WalletConnectDapp = () => {
     });
 
     // web3wallet.on("session_proposal", onSessionProposal);
-    await web3wallet.pair({ uri: walletConnectUri });
+    await web3wallet.core.pairing.pair({ uri: walletConnectUri });
     console.log("connected");
   };
 
-  // disconnect
+  const acctivatePairing = async (topic: string) => {
+    await web3wallet.core.pairing.activate({ topic: topic });
+  };
+
+  // disconnect from the session
 
   const disconnectWalletConnect = async () => {
     const topics = Object.keys(web3wallet.getActiveSessions());
@@ -102,6 +106,15 @@ export const WalletConnectDapp = () => {
     }
   });
 
+  // pairings listing
+  const [pairings, setPairings] = useState(web3wallet ? web3wallet.core.pairing.getPairings() : []);
+
+  async function onDelete(topic: string) {
+    await web3wallet.disconnectSession({ topic, reason: getSdkError("USER_DISCONNECTED") });
+    const newPairings = pairings.filter((pairing: any) => pairing.topic !== topic);
+    setPairings(newPairings);
+  }
+
   return (
     <>
       <h1 className="text-center font-bold mt-5">Wallet Connect</h1>
@@ -114,8 +127,19 @@ export const WalletConnectDapp = () => {
       <button onClick={() => console.log(Object.keys(web3wallet.getActiveSessions()))}>Active Sessions</button>
       <button onClick={() => console.log(web3wallet.core.pairing.getPairings())}>Pairings</button>
       <button onClick={() => console.log(pingFunction())}>Ping</button>
-      <button onClick={() => console.log(walletConnectConnected)}>Ping</button>
+      <button onClick={() => console.log(setPairings(web3wallet.core.pairing.getPairings()))}>Set Pairings</button>
+      <button onClick={() => console.log(pairings)}>Pairings from set</button>
 
+      {pairings &&
+        pairings.map((pairing: any, index: any) => {
+          return (
+            <div key={index}>
+              <h2>{pairing.topic}</h2>
+              <button onClick={() => onDelete(pairing.topic)}> Delete</button>
+              <button onClick={() => acctivatePairing(pairing.topic)}> Activate Pairing</button>
+            </div>
+          );
+        })}
       <form>
         <input
           onChange={e => setWalletConnectUri(e.target.value)}

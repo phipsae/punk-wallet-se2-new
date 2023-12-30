@@ -1,6 +1,6 @@
 // import { createEthersWallet, sendTransaction } from "./EIP1559Helper";
+import { Tokens } from "../Tokens";
 import WalletConnectV2ConnectionError from "./OGWalletConnectV2ConnectionError";
-import { Tokens } from "./Tokens";
 // import { TransactionManager } from "./TransactionManager";
 import { Core } from "@walletconnect/core";
 import { getSdkError } from "@walletconnect/utils";
@@ -80,7 +80,7 @@ export const onSessionProposal = async (
   //   disconnectFromWalletConnect?: any,
   //   popUp: any,
 ) => {
-  console.log("proposal", proposal);
+  //   console.log("proposal", proposal);
 
   if (isWalletConnectV2Connected(web3wallet)) {
     // await disconnectFromWalletConnect(undefined, web3wallet);
