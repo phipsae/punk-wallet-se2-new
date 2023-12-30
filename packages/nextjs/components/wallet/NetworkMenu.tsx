@@ -15,6 +15,7 @@ export const NetworkMenu = () => {
     mainnet: chains.mainnet,
     arbitrum: chains.arbitrum,
     optimism: chains.optimism,
+    goerli: chains.goerli,
   };
 
   const toggleDropdown = () => {
