@@ -48,9 +48,33 @@ export const TokenOverview = ({ networkName, address, refreshCount }: TokenOverv
     // Code to refresh the component data
   }, [refreshCount]); // Dependency on refreshCount
 
+  const handleDropdownChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedAddress = event.target.value;
+    if (selectedAddress === "nativeToken") {
+      handleCheckboxChange("nativeToken", nativeToken.name, nativeToken.imgSrc);
+    } else {
+      const selectedToken = erc20Tokens.find(token => token.address === selectedAddress);
+      if (selectedToken) {
+        handleCheckboxChange(selectedToken.address, selectedToken.name, selectedToken.imgSrc);
+      }
+    }
+  };
+
   return (
     <>
       <div className="overflow-x-auto">
+        <select
+          value={selectedTokenAddress}
+          onChange={handleDropdownChange}
+          className="select select-bordered w-full max-w-xs"
+        >
+          <option value="nativeToken">{nativeToken.name}</option>
+          {erc20Tokens.map(token => (
+            <option key={token.address} value={token.address}>
+              {token.name}
+            </option>
+          ))}
+        </select>
         <table className="table w-full ">
           {/* head */}
           <thead>
