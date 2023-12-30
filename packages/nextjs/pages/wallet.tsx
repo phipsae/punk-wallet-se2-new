@@ -9,8 +9,6 @@ import { SelectedTokenTransaction } from "~~/components/wallet/Transaction/Selec
 import { WalletOverview } from "~~/components/wallet/WalletOverview/WalletOverview";
 import { useSharedState } from "~~/sharedStateContext";
 
-// let account: any;
-
 const Wallet: NextPage = () => {
   const { selectedPrivateKey, isRainbow } = useSharedState();
   const { selectedChain, selectedTokenAddress, selectedTokenName, selectedTokenImage } = useSharedState();
@@ -51,7 +49,7 @@ const Wallet: NextPage = () => {
     <>
       <div className="container mx-auto flex flex-col mt-5">
         <div className="flex flex-row gap-5 items-center">
-          <div className="w-1/12">
+          <div className="w-100px">
             <NetworkMenu />
           </div>
           <div>
@@ -60,9 +58,9 @@ const Wallet: NextPage = () => {
             </button>
           </div>
         </div>
-        <div className="flex flex-row gap-5">
+        <div className="flex flex-col gap-5 md:flex-row">
           {account && selectedPrivateKey && (
-            <div className="flex flex-col flex-1 mt-5 border p-5">
+            <div className="flex flex-col flex-1 mt-5 border p-5 min-w-0">
               <WalletOverview
                 account={account}
                 chain={selectedChain}
@@ -84,7 +82,9 @@ const Wallet: NextPage = () => {
               <span className="block text-2xl font-bold">💸 Token Overview</span>
             </div>
             {account && (
-              <TokenOverview networkName={selectedChain} address={account.address} refreshCount={refreshCount} />
+              <div className="overflow-auto">
+                <TokenOverview networkName={selectedChain} address={account.address} refreshCount={refreshCount} />
+              </div>
             )}
           </div>
         </div>
