@@ -4,6 +4,7 @@ import type { NextPage } from "next";
 import { privateKeyToAccount } from "viem/accounts";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { NetworkMenu } from "~~/components/wallet/NetworkMenu";
+import { TokenMenu } from "~~/components/wallet/TokenOverview/TokenMenu";
 import { TokenOverview } from "~~/components/wallet/TokenOverview/TokenOverview";
 import { SelectedTokenTransaction } from "~~/components/wallet/Transaction/SelectedTokenTransaction";
 import { WalletOverview } from "~~/components/wallet/WalletOverview/WalletOverview";
@@ -48,14 +49,17 @@ const Wallet: NextPage = () => {
   return (
     <>
       <div className="container mx-auto flex flex-col mt-5">
-        <div className="flex flex-row gap-5 items-center">
-          <div className="w-100px">
+        <div className="flex flex-row items-center justify-between">
+          <div className="">
             <NetworkMenu />
           </div>
           <div>
             <button onClick={refreshComponents} className="btn btn-primary">
               <ArrowPathIcon className="h-4 w-4" />
             </button>
+          </div>
+          <div>
+            <TokenMenu networkName={selectedChain} />
           </div>
         </div>
         <div className="flex flex-col gap-5 md:flex-row">
