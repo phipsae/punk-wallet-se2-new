@@ -79,7 +79,7 @@ export const Header = () => {
   };
 
   return (
-    <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-secondary px-0 sm:px-2">
+    <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-secondary px-0 sm:px-2 w-full">
       <div className="navbar-start w-auto lg:w-1/2">
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <label
@@ -119,7 +119,7 @@ export const Header = () => {
       <div className="navbar-end flex-grow mr-4">
         <div className="flex flex-row gap-5 items-center">
           {account && !isRainbow && (
-            <div>
+            <div className="hidden lg:block">
               <AddressAdapted address={account.address} format="short" />
             </div>
           )}
