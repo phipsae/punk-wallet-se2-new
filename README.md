@@ -4,9 +4,9 @@ First version of [punk wallet](https://punkwallet.io/) built with Scaffold-ETH 2
 
 There still missing features, which will be implemented soon:
 
-- Persistent of data, once the page is refreshed the accounts are gone
-- WalletConnect and MetaMask Connect not implementend yet
-- Other small things (transaction history, etc.)
+- WalletConnect not implementend yet
+- Transaction history
+- Encryption of local stored private keys
 
 ![Punk Wallet Overview](https://github.com/phipsae/punk-wallet-se2-new/blob/main//packages/nextjs/public/PW_SE2_overview.png)
 

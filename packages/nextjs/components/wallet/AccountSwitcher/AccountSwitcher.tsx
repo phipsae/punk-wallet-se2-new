@@ -132,7 +132,7 @@ export const AccountSwitcher = () => {
                             <tr
                               key={index}
                               className={`cursor-pointer ${
-                                privateKey === selectedPrivateKey ? "bg-gray-100 font-bold" : "bg-base-200"
+                                privateKey === selectedPrivateKey ? "bg-blue-100 font-bold" : "bg-base-200"
                               }`}
                             >
                               <th className="w-1/5">

@@ -30,7 +30,10 @@ export const SharedStateProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [selectedTokenImage, setSelectedTokenImage] = useState<string>("/ETH.png");
   const [selectedBlockExplorer, setSelectedBlockExplorer] = useState<string>("https://etherscan.io/");
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
-  const [selectedPrivateKey, setSelectedPrivateKey] = useState<string>("");
+  const [selectedPrivateKey, setSelectedPrivateKey] = useState<string>(
+    // process.env.NEXT_PUBLIC_PRIVATE_KEY_WALLET as `0x${string}`,
+    "",
+  );
   const [privateKeys, setPrivateKeys] = useState<string[]>([]);
   const [isRainbow, setIsRainbow] = useState<boolean>(false);
 

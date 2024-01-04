@@ -41,6 +41,7 @@
     "@nextui-org/react": "^2.2.9",
     "@walletconnect/client": "^1.8.0",
     "@walletconnect/web3wallet": "^1.9.5",
+    "vercel": "latest",
     "wagmi": "^1.4.12"
   }
 }

@@ -27,7 +27,7 @@ if (typeof window !== "undefined" && localStorage.selectedChain) {
   // @ts-ignore - Ignoring type error for demonstration purposes
   network = networkMappings[selectedChain];
   console.log("SE-CONFIG", network);
-  console.log("LS", localStorage);
+  console.log("LS", localStorage.selectedChain);
 }
 
 const scaffoldConfig = {

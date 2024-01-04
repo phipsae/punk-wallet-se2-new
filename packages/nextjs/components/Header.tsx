@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { AddressAdapted } from "./scaffold-eth/AddressAdapted";
-import { RainbowKitCustomConnectButtonPW } from "./scaffold-eth/RainbowKitCustomConnectButtonPW";
+// import { RainbowKitCustomConnectButtonPW } from "./scaffold-eth/RainbowKitCustomConnectButtonPW";
 import { AccountSwitcher } from "./wallet/AccountSwitcher/AccountSwitcher";
 import { privateKeyToAccount } from "viem/accounts";
 import { WalletIcon } from "@heroicons/react/20/solid";
@@ -79,7 +79,7 @@ export const Header = () => {
   };
 
   return (
-    <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-secondary px-0 sm:px-2">
+    <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-secondary px-0 sm:px-2 w-full">
       <div className="navbar-start w-auto lg:w-1/2">
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <label
@@ -119,7 +119,7 @@ export const Header = () => {
       <div className="navbar-end flex-grow mr-4">
         <div className="flex flex-row gap-5 items-center">
           {account && !isRainbow && (
-            <div>
+            <div className="hidden lg:block">
               <AddressAdapted address={account.address} format="short" />
             </div>
           )}
@@ -128,7 +128,7 @@ export const Header = () => {
               <WalletIcon className="h-8 w-8" /> Accounts
             </button>
           )}
-          <RainbowKitCustomConnectButtonPW />
+          {/* <RainbowKitCustomConnectButtonPW /> */}
         </div>
         <AccountSwitcher />
         {/* <FaucetButton /> */}

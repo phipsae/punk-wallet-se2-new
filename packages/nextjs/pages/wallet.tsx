@@ -4,9 +4,10 @@ import type { NextPage } from "next";
 import { privateKeyToAccount } from "viem/accounts";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { NetworkMenu } from "~~/components/wallet/NetworkMenu";
+import { TokenMenu } from "~~/components/wallet/TokenOverview/TokenMenu";
 import { TokenOverview } from "~~/components/wallet/TokenOverview/TokenOverview";
 import { SelectedTokenTransaction } from "~~/components/wallet/Transaction/SelectedTokenTransaction";
-import { WalletConnectDapp } from "~~/components/wallet/WalletConnect/WalletConnectDapp";
+import { WalletConnectDapp } from "~~/components/wallet/WalletConnect/screens/WalletConnectDapp";
 import { WalletOverview } from "~~/components/wallet/WalletOverview/WalletOverview";
 import { useSharedState } from "~~/sharedStateContext";
 
@@ -25,7 +26,7 @@ const Wallet: NextPage = () => {
       } else if (selectedPrivateKey !== "") {
         setAccount(privateKeyToAccount(selectedPrivateKey as `0x${string}`));
       } else {
-        setAccount(privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PRIVATE_KEY_WALLET}`));
+        setAccount(privateKeyToAccount(`${process.env.NEXT_PUBLIC_PRIVATE_KEY_WALLET}` as `0x${string}`));
       }
     };
 
@@ -49,8 +50,8 @@ const Wallet: NextPage = () => {
   return (
     <>
       <div className="container mx-auto flex flex-col mt-5">
-        <div className="flex flex-row gap-5 items-center">
-          <div className="w-1/12">
+        <div className="flex flex-row items-center justify-between">
+          <div className="">
             <NetworkMenu />
           </div>
           <div>
@@ -58,12 +59,14 @@ const Wallet: NextPage = () => {
               <ArrowPathIcon className="h-4 w-4" />
             </button>
           </div>
+          <div>
+            <TokenMenu networkName={selectedChain} />
+          </div>
         </div>
         <WalletConnectDapp />
-        {/* <OGWalletConnect /> */}
         <div className="flex flex-row gap-5">
           {account && selectedPrivateKey && (
-            <div className="flex flex-col flex-1 mt-5 border p-5">
+            <div className="flex flex-col flex-1 mt-5 border p-5 min-w-0">
               <WalletOverview
                 account={account}
                 chain={selectedChain}
@@ -85,7 +88,9 @@ const Wallet: NextPage = () => {
               <span className="block text-2xl font-bold">💸 Token Overview</span>
             </div>
             {account && (
-              <TokenOverview networkName={selectedChain} address={account.address} refreshCount={refreshCount} />
+              <div className="overflow-auto">
+                <TokenOverview networkName={selectedChain} address={account.address} refreshCount={refreshCount} />
+              </div>
             )}
           </div>
         </div>

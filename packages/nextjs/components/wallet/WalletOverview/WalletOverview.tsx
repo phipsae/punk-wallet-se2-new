@@ -39,7 +39,12 @@ export const WalletOverview = ({
       </div>
       <div className="flex flex-col items-center mt-5 gap-5">
         <QRCodeSVG value={account.address} width={150} height={150} />
-        <AddressAdapted format="long" address={account.address} />
+        <div className="lg:hidden">
+          <AddressAdapted format="short" address={account.address} />
+        </div>
+        <div className="hidden lg:block">
+          <AddressAdapted format="long" address={account.address} />
+        </div>
       </div>
     </>
   );
