@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { approveEIP155Request, rejectEIP155Request } from "../utils/EIP155Requests";
 // import { getSignParamsMessage } from "../utils/Helpers";
 import { web3wallet } from "../utils/WalletConnectUtils";
@@ -5,7 +6,8 @@ import { SignClientTypes } from "@walletconnect/types";
 
 interface SignModalProps {
   visible: boolean;
-  setModalVisible: (arg1: boolean) => void;
+  setModalVisible: (arg: boolean) => void;
+  setIsNewRequest: (arg: boolean) => void;
   requestSession: any;
   requestEvent: SignClientTypes.EventArguments["session_request"] | undefined;
   selectedChain: string;
@@ -24,10 +26,11 @@ export const SignModal = ({
   requestSession,
   account,
   selectedChain,
+  setIsNewRequest,
 }: SignModalProps) => {
+  // if (!requestEvent || !requestSession) return null;
   console.log("RequestEvent form SignModal", requestEvent);
   console.log("RequestEvent form SignModal", requestSession);
-  if (!requestEvent || !requestSession) return null;
 
   const chainID = requestEvent?.params?.chainId?.toUpperCase();
   const method = requestEvent?.params?.request?.method;
@@ -38,10 +41,10 @@ export const SignModal = ({
   //   const requestIcon = requestSession?.peer?.metadata?.icons[0];
   const requestURL = requestSession?.peer?.metadata?.url;
 
-  const { topic } = requestEvent;
+  const topic = requestEvent?.topic;
 
   async function onApprove() {
-    if (requestEvent) {
+    if (requestEvent && topic) {
       const response = await approveEIP155Request(requestEvent, account, selectedChain);
       if (response) {
         await web3wallet.respondSessionRequest({
@@ -50,30 +53,34 @@ export const SignModal = ({
         });
       }
       setModalVisible(false);
+      setIsNewRequest(false);
     }
   }
 
   async function onReject() {
-    if (requestEvent) {
+    if (requestEvent && topic) {
       const response = rejectEIP155Request(requestEvent);
       await web3wallet.respondSessionRequest({
         topic,
         response,
       });
       setModalVisible(false);
-      console.log(localStorage);
+      setIsNewRequest(false);
     }
   }
 
   console.log("Sign Incoming");
 
-  const signModal = document.getElementById("sign_modal");
-  if (isDialogElement(signModal)) {
-    signModal.showModal();
-  }
+  useEffect(() => {
+    const signModal = document.getElementById("sign_modal");
+    if (isDialogElement(signModal)) {
+      signModal.showModal();
+    }
+  });
 
   return (
     <>
+      <h1> HUHU</h1>
       <dialog id="sign_modal" className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg">Request from {requestName}</h3>

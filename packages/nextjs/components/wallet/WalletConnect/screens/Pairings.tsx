@@ -34,6 +34,9 @@ export const Pairings = () => {
       <button className="btn" onClick={() => console.log("Pairings", pairings)}>
         Pairings
       </button>
+      <button className="btn" onClick={() => setPairings(web3wallet ? web3wallet.core.pairing.getPairings() : [])}>
+        Set Pairings
+      </button>
       <br />
 
       {pairings.length
