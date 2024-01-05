@@ -24,9 +24,13 @@ export const ImportAccount = ({ onClose, privateKeys, setPrivateKeys, setSelecte
         setError("Account already exists");
         return;
       }
-
-      setPrivateKeys([...privateKeys, privateKey]);
+      const updatedPrivateKeys = [...privateKeys, privateKey];
+      setPrivateKeys(updatedPrivateKeys);
       console.log(privateKeys);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("storedPrivateKeys", JSON.stringify(updatedPrivateKeys));
+        localStorage.setItem("selectedPrivateKey", JSON.stringify(privateKey));
+      }
       setSelectedPrivateKey(privateKey);
       onClose();
       notification.success("Account succesfully added");
