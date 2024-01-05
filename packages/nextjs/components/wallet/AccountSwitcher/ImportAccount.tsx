@@ -24,11 +24,13 @@ export const ImportAccount = ({ onClose, privateKeys, setPrivateKeys, setSelecte
         setError("Account already exists");
         return;
       }
+
       setPrivateKeys([...privateKeys, privateKey]);
+      console.log(privateKeys);
       setSelectedPrivateKey(privateKey);
       onClose();
       notification.success("Account succesfully added");
-      return privateKey;
+      // return privateKey;
     } catch (error) {
       setIsError(true);
       setError("Wrong format");
@@ -59,8 +61,16 @@ export const ImportAccount = ({ onClose, privateKeys, setPrivateKeys, setSelecte
           <button
             className="btn btn-primary h-[2.2rem] min-h-[2.2rem] mt-3 flex-1"
             onClick={() => {
+              console.log("Private Key", privateKeys);
+            }}
+          >
+            Print PK
+          </button>
+          <button
+            className="btn btn-primary h-[2.2rem] min-h-[2.2rem] mt-3 flex-1"
+            onClick={() => {
               generateAccount(privateKey);
-              console.log(privateKey);
+              console.log("Private Key", privateKey);
             }}
           >
             Import account

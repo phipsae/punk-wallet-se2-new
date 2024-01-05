@@ -7,7 +7,6 @@ import { SignClientTypes } from "@walletconnect/types";
 interface SignModalProps {
   visible: boolean;
   setModalVisible: (arg: boolean) => void;
-  setIsNewRequest: (arg: boolean) => void;
   requestSession: any;
   requestEvent: SignClientTypes.EventArguments["session_request"] | undefined;
   selectedChain: string;
@@ -26,7 +25,6 @@ export const SignModal = ({
   requestSession,
   account,
   selectedChain,
-  setIsNewRequest,
 }: SignModalProps) => {
   // if (!requestEvent || !requestSession) return null;
   console.log("RequestEvent form SignModal", requestEvent);
@@ -53,7 +51,6 @@ export const SignModal = ({
         });
       }
       setModalVisible(false);
-      setIsNewRequest(false);
     }
   }
 
@@ -65,7 +62,6 @@ export const SignModal = ({
         response,
       });
       setModalVisible(false);
-      setIsNewRequest(false);
     }
   }
 
@@ -80,7 +76,6 @@ export const SignModal = ({
 
   return (
     <>
-      <h1> HUHU</h1>
       <dialog id="sign_modal" className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg">Request from {requestName}</h3>

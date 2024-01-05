@@ -4,6 +4,7 @@ import { getSignParamsMessage, getSignTypedDataParamsData } from "./Helpers";
 import { formatJsonRpcResult } from "@walletconnect/jsonrpc-utils";
 import { SignClientTypes } from "@walletconnect/types";
 import { getSdkError } from "@walletconnect/utils";
+import { parseGwei } from "viem";
 
 export async function approveEIP155Request(
   requestEvent: SignClientTypes.EventArguments["session_request"],
@@ -38,9 +39,14 @@ export async function approveEIP155Request(
         const signedData = await walletClient.signTypedData({ account, domain, types, data });
         return formatJsonRpcResult(id, signedData);
 
+      case EIP155_SIGNING_METHODS.ETH_SEND_RAW_TRANSACTION:
       case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
         const sendTransaction = request.params[0];
-
+        console.log("ETH SEND TRANSACTION", sendTransaction);
+        sendTransaction.gas = parseGwei("0.000028");
+        // sendTransaction.gasPrice = parseGwei("20");
+        sendTransaction.maxFeePerGas = parseGwei("0.00002");
+        console.log("ETH SEND TRANSACTION", sendTransaction);
         const hash = await walletClient.sendTransaction(sendTransaction);
         return formatJsonRpcResult(id, hash);
 

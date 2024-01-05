@@ -18,6 +18,7 @@ export const PrivateKeyInput = ({
     (newValue: Address) => {
       if (newValue && !newValue.startsWith("0x")) {
         setError("Wrong format");
+        console.log("Wrong?");
       } else {
         setError("");
       }

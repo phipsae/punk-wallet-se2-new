@@ -29,8 +29,6 @@ export const WalletConnectDapp = () => {
   const [requestSession, setRequestSession] = useState();
   const [requestEventData, setRequestEventData] = useState();
 
-  const [isNewRequest, setIsNewRequest] = useState(false);
-
   let account: any;
 
   if (typeof window !== "undefined" && selectedPrivateKey != "") {
@@ -64,7 +62,6 @@ export const WalletConnectDapp = () => {
       setModalVisible(false);
       setCurrentWCURI("");
       setCurrentProposal(undefined);
-      setIsNewRequest(false);
     }
   }, [currentProposal]);
 
@@ -114,50 +111,37 @@ export const WalletConnectDapp = () => {
     setSuccessfulSession(false);
   }
 
-  const onSessionRequest = useCallback(
-    async (requestEvent: SignClientTypes.EventArguments["session_request"]) => {
-      const { topic, params } = requestEvent;
-      const { request } = params;
-      const requestSessionData = web3wallet.engine.signClient.session.get(topic);
-      console.log("Request from onSessionRequest WCDAPP", requestEvent);
-      console.log("requestSessionData from onSessionRequest WCDAPP", requestSessionData);
-      setIsNewRequest(true);
-      console.log("NEw Request", isNewRequest);
-      if (requestEvent && requestSessionData) {
-        switch (request.method) {
-          // case EIP155_SIGNING_METHODS.ETH_SIGN:
-          // case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA:
-          // case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3:
-          // case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4:
-          case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
-            console.log("HUHU");
-          // case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
-          case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
-            // @ts-ignore
-            setRequestSession(requestSessionData);
-            // @ts-ignore
-            setRequestEventData(requestEvent);
-            setSignModalVisible(true);
-            return;
-        }
+  const onSessionRequest = useCallback(async (requestEvent: SignClientTypes.EventArguments["session_request"]) => {
+    const { topic, params } = requestEvent;
+    const { request } = params;
+    const requestSessionData = web3wallet.engine.signClient.session.get(topic);
+    console.log("Request from onSessionRequest WCDAPP", requestEvent);
+    console.log("requestSessionData from onSessionRequest WCDAPP", requestSessionData);
+
+    if (requestEvent && requestSessionData) {
+      switch (request.method) {
+        // case EIP155_SIGNING_METHODS.ETH_SIGN:
+        // case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA:
+        // case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3:
+        // case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4:
+        case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
+          console.log("HUHU");
+        // case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
+        case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
+          // @ts-ignore
+          setRequestSession(requestSessionData);
+          // @ts-ignore
+          setRequestEventData(requestEvent);
+          setSignModalVisible(true);
+          return;
       }
-    },
-    [isNewRequest],
-  );
+    }
+  }, []);
 
   useEffect(() => {
-    const handleSessionProposal = web3wallet?.on("session_proposal", onSessionProposal);
-    const handleSessionRequest = web3wallet?.on("session_request", onSessionRequest);
-    if (isNewRequest) {
-      setSignModalVisible(true);
-      console.log("New request is now true");
-    }
-
-    return () => {
-      if (handleSessionProposal) web3wallet?.off("session_proposal", onSessionProposal);
-      if (handleSessionRequest) web3wallet?.off("session_request", onSessionRequest);
-    };
-  }, [onSessionProposal, pair, handleAccept, handleReject, onSessionRequest, isNewRequest]);
+    web3wallet?.on("session_proposal", onSessionProposal);
+    web3wallet?.on("session_request", onSessionRequest);
+  }, [onSessionProposal, pair, handleAccept, handleReject, onSessionRequest]);
 
   return (
     <>
@@ -197,7 +181,6 @@ export const WalletConnectDapp = () => {
           setModalVisible={setSignModalVisible}
           requestEvent={requestEventData}
           requestSession={requestSession}
-          setIsNewRequest={setIsNewRequest}
         />
       )}
       -----
