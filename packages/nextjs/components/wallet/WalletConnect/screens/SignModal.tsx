@@ -12,6 +12,11 @@ interface SignModalProps {
   account: any;
 }
 
+// to get rid of the typescript errors
+function isDialogElement(element: HTMLElement | null): element is HTMLDialogElement {
+  return element !== null && "close" in element;
+}
+
 export const SignModal = ({
   visible,
   setModalVisible,
@@ -24,7 +29,7 @@ export const SignModal = ({
   console.log("RequestEvent form SignModal", requestSession);
   if (!requestEvent || !requestSession) return null;
 
-  //   const chainID = requestEvent?.params?.chainId?.toUpperCase();
+  const chainID = requestEvent?.params?.chainId?.toUpperCase();
   const method = requestEvent?.params?.request?.method;
   //   MEssage throws an error
   //   const message = getSignParamsMessage(requestEvent?.params?.request?.params);
@@ -60,23 +65,48 @@ export const SignModal = ({
     }
   }
 
+  console.log("Sign Incoming");
+
+  const signModal = document.getElementById("sign_modal");
+  if (isDialogElement(signModal)) {
+    signModal.showModal();
+  }
+
   return (
     <>
-      <h1>SignModal</h1>
-      {requestName}
-      {requestURL}
-      <br />
+      <dialog id="sign_modal" className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Request from {requestName}</h3>
+          <div>
+            <p className="py-4">Config</p>
+            <br />
+            Visible: {visible}
+            <br />
+            ChainsID: {chainID}
+            <br />
+            RequestUrl: {requestURL}
+            <br />
+            Method: {method}
+            <br />
+            <div className="modal-action">
+              <form method="dialog">
+                {/* <button className="btn">Close</button> */}
+                <button className="btn btn-primary mt-3" onClick={() => onApprove()}>
+                  Sign - Accept
+                </button>
+                <br />
+                <button className="btn btn-error mt-3" onClick={() => onReject()}>
+                  Sign - Reject
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </dialog>
+
       {/* Message: {message} */}
-      {visible}
+
       <br />
-      {method}
-      <button className="btn btn-primary mt-3" onClick={() => onApprove()}>
-        Sign - Accept
-      </button>
-      <br />
-      <button className="btn btn-error mt-3" onClick={() => onReject()}>
-        Sign - Reject
-      </button>
     </>
   );
 };
