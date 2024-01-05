@@ -6,12 +6,12 @@ import useInitialization, { // approvedNamespaces,
   web3WalletPair,
   web3wallet,
 } from "../utils/WalletConnectUtils";
+import { ConnectModal } from "./ConnectModal";
 import PairingModal from "./PairingModal";
+import { Pairings } from "./Pairings";
 import { SignModal } from "./SignModal";
 import { SessionTypes, SignClientTypes } from "@walletconnect/types";
-// import PairingsPage from "./utils/pairings";
 import { getSdkError } from "@walletconnect/utils";
-// import { fromHex } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { useSharedState } from "~~/sharedStateContext";
 
@@ -22,7 +22,7 @@ export const WalletConnectDapp = () => {
   const [currentWCURI, setCurrentWCURI] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [currentProposal, setCurrentProposal] = useState();
-  const [isPaired, setIsPaired] = useState(false);
+
   const [signModalVisible, setSignModalVisible] = useState(false);
   const [successfulSession, setSuccessfulSession] = useState(false);
 
@@ -41,7 +41,7 @@ export const WalletConnectDapp = () => {
     const pairing = await web3WalletPair({
       uri: currentWCURI,
     });
-    setIsPaired(true);
+
     return pairing;
   }, [currentWCURI]);
 
@@ -50,21 +50,6 @@ export const WalletConnectDapp = () => {
     // @ts-ignore
     setCurrentProposal(proposal);
   }, []);
-
-  // const acctivatePairing = async (topic: string) => {
-  //   await web3wallet.core.pairing.activate({ topic: topic });
-  // };
-
-  // Session: disconnect from the session, delete Pairings
-
-  // // pairings listing
-  // const [pairings, setPairings] = useState(web3wallet ? web3wallet.core.pairing.getPairings() : []);
-
-  // async function onDelete(topic: string) {
-  //   await web3wallet.disconnectSession({ topic, reason: getSdkError("USER_DISCONNECTED") });
-  //   const newPairings = pairings.filter((pairing: any) => pairing.topic !== topic);
-  //   setPairings(newPairings);
-  // }
 
   const handleReject = useCallback(async () => {
     if (currentProposal) {
@@ -77,7 +62,6 @@ export const WalletConnectDapp = () => {
       setModalVisible(false);
       setCurrentWCURI("");
       setCurrentProposal(undefined);
-      setIsPaired(false);
     }
   }, [currentProposal]);
 
@@ -110,7 +94,6 @@ export const WalletConnectDapp = () => {
       setCurrentWCURI("");
       setCurrentProposal(undefined);
       setSuccessfulSession(true);
-      setIsPaired(false);
     }
   }, [currentProposal, account]);
 
@@ -163,6 +146,8 @@ export const WalletConnectDapp = () => {
   return (
     <>
       <h1 className="text-center font-bold mt-5">Wallet Connect</h1>
+      <button onClick={() => web3wallet?.on("session_proposal", onSessionProposal)}> Handle Accept</button>
+      {web3wallet && <Pairings />}
       {successfulSession && (
         <div>
           Successful connect to ...
@@ -177,39 +162,14 @@ export const WalletConnectDapp = () => {
           <button className="btn" onClick={() => document.getElementById("wallet_connect").showModal()}>
             Connect to Wallet Connect LOGO
           </button>
-          <dialog id="wallet_connect" className="modal">
-            <div className="modal-box">
-              <h3 className="font-bold text-lg">Connect with Wallet Connect</h3>
-              {!isPaired && (
-                <div>
-                  <p className="py-4">Enter the wallet connect uri</p>
-                  <div className="modal-action">
-                    <form method="dialog">
-                      <input
-                        onChange={e => setCurrentWCURI(e.target.value)}
-                        value={currentWCURI}
-                        placeholder="Enter WC URI (wc:1234...)"
-                      />
-                      <br />
-                      <button className="btn btn-primary" onClick={() => pair()} title="Pair Session" type="button">
-                        Connect
-                      </button>
-                      <button className="btn">Close</button>
-                    </form>
-                  </div>
-                </div>
-              )}
-              {isPaired && (
-                <PairingModal
-                  handleAccept={handleAccept}
-                  handleReject={handleReject}
-                  visible={modalVisible}
-                  setModalVisible={setModalVisible}
-                  currentProposal={currentProposal}
-                />
-              )}
-            </div>
-          </dialog>
+          <ConnectModal setCurrentWCURI={setCurrentWCURI} currentWCURI={currentWCURI} pair={pair} />
+          <PairingModal
+            handleAccept={handleAccept}
+            handleReject={handleReject}
+            visible={modalVisible}
+            setModalVisible={setModalVisible}
+            currentProposal={currentProposal}
+          />
         </div>
       )}
       -----
@@ -222,7 +182,6 @@ export const WalletConnectDapp = () => {
         requestSession={requestSession}
       />
       -----
-      {/* <button onClick={() => disconnectWalletConnect()}>Disconnect</button> */}
       {/* <button onClick={() => console.log(rejectFunction())}>Reject</button> */}
       {/* <button onClick={() => console.log(web3wallet.core.pairing.getPairings())}>Pairings</button> */}
       {/* <button onClick={() => console.log(setPairings(web3wallet.core.pairing.getPairings()))}>Set Pairings</button> */}
