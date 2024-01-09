@@ -163,7 +163,7 @@ export const Tokens: TokensType = {
     name: "sepolia",
     color: "#12100B",
     price: "uniswap",
-    chainId: 42161,
+    chainId: 11155111,
     blockExplorer: "https://sepolia.etherscan.io",
     // rpcUrl: `https://arb-mainnet.g.alchemy.com/v2/tYM-Tr8c9dHV5a8AgvXnVmS9e-xvoxeM`,
     // //gasPrice: 1000000000,// TODO ASK RPC
@@ -199,6 +199,75 @@ export const Tokens: TokensType = {
     nativeToken: {
       name: "ETH",
       imgSrc: "/ETH.png",
+    },
+  },
+
+  zora: {
+    name: "zora",
+    color: "#0975F6",
+    price: "uniswap",
+    chainId: 280,
+    // faucet: "https://goerli-faucet.slock.it/",
+    blockExplorer: "https://goerli.etherscan.io/",
+    // rpcUrl: `https://eth-goerli.g.alchemy.com/v2/4vFnzFt4K0gFDvYodzTuH9ZjbGI-awSf`,
+    erc20Tokens: [
+      {
+        name: "tDAI",
+        address: "0x9ef870fDf44fAD7eF6DBcfaA68BeF95025721Bd7",
+        decimals: 18,
+        imgSrc: "/DAI.png",
+      },
+    ],
+    nativeToken: {
+      name: "ETH",
+      imgSrc: "/ETH.png",
+    },
+  },
+  polygon: {
+    name: "polygon",
+    color: "#2bbdf7",
+    price: "uniswap:0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
+    chainId: 137,
+    // rpcUrl: "https://polygon-mainnet.g.alchemy.com/v2/7ls4W5wc3Cu-4-Zq2QaQxgUhJKjUIDay",
+    // faucet: "https://faucet.matic.network/",
+    blockExplorer: "https://polygonscan.com/",
+    erc20Tokens: [
+      // {
+      //   name: "EURe",
+      //   address: "0x18ec0A6E18E5bc3784fDd3a3634b31245ab704F6",
+      //   decimals: 18,
+      //   imgSrc: "/EURe.png",
+      // },
+      // {
+      //   name: "USDC",
+      //   address: POLYGON_USDC_ADDRESS,
+      //   decimals: 6,
+      //   imgSrc: "/USDC.png",
+      // },
+      // {
+      //   name: "USDT",
+      //   address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+      //   decimals: 6,
+      //   imgSrc: "/USDT.png",
+      //   NativeMetaTransaction: {
+      //     name: "(PoS) Tether USD",
+      //     ERC712_VERSION: "1",
+      //   },
+      // },
+      // {
+      //   name: "DAI",
+      //   address: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+      //   decimals: 18,
+      //   imgSrc: "/DAI.png",
+      //   NativeMetaTransaction: {
+      //     name: "(PoS) Dai Stablecoin",
+      //     ERC712_VERSION: "1",
+      //   },
+      // },
+    ],
+    nativeToken: {
+      name: "MATIC",
+      imgSrc: "/MATIC.png",
     },
   },
 };

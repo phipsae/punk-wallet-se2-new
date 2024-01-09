@@ -4,7 +4,7 @@ import { SignClientTypes } from "@walletconnect/types";
 
 interface PairingModalProps {
   visible: boolean;
-  setModalVisible: (arg1: boolean) => void;
+  setModalVisible: (arg: boolean) => void;
   currentProposal: SignClientTypes.EventArguments["session_proposal"] | undefined;
   handleAccept: () => void;
   handleReject: () => void;
@@ -15,13 +15,13 @@ function isDialogElement(element: HTMLElement | null): element is HTMLDialogElem
   return element !== null && "close" in element;
 }
 
-export default function PairingModal({ visible, currentProposal, handleAccept, handleReject }: PairingModalProps) {
+export const PairingModal = ({ visible, currentProposal, handleAccept, handleReject }: PairingModalProps) => {
   const name = currentProposal?.params?.proposer?.metadata?.name;
   const url = currentProposal?.params?.proposer?.metadata.url;
   const methods = currentProposal?.params?.requiredNamespaces.eip155.methods;
   const events = currentProposal?.params?.requiredNamespaces.eip155.events;
   const chains = currentProposal?.params?.requiredNamespaces.eip155.chains;
-  const icon = currentProposal?.params.proposer.metadata.icons[0];
+  // const icon = currentProposal?.params.proposer.metadata.icons[0];
 
   console.log("Current Proposal", currentProposal);
 
@@ -43,7 +43,7 @@ export default function PairingModal({ visible, currentProposal, handleAccept, h
           <div>
             <p className="py-4">Config</p>
             {/* <Image src={icon || ""} alt="DApp Icon" width={50} height={50} /> */}
-            Icon URL: {icon}
+            {/* Icon URL: {icon} */}
             <br />
             Name: {name} {visible}
             <br />
@@ -77,4 +77,4 @@ export default function PairingModal({ visible, currentProposal, handleAccept, h
       </dialog>
     </>
   );
-}
+};

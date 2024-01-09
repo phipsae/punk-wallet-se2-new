@@ -1,16 +1,24 @@
+// import { publicClientSelector } from "../../publicClientSelector";
 import { walletClientSelector } from "../../walletClientSelector";
 import { EIP155_SIGNING_METHODS } from "./EIP155Lib";
 import { getSignParamsMessage, getSignTypedDataParamsData } from "./Helpers";
 import { formatJsonRpcResult } from "@walletconnect/jsonrpc-utils";
 import { SignClientTypes } from "@walletconnect/types";
 import { getSdkError } from "@walletconnect/utils";
-import { parseGwei } from "viem";
+// import { parseGwei } from "viem";
+import { fromHex } from "viem";
 
-export async function approveEIP155Request(
+// const abi = parseAbi([
+//   // "function balanceOf(address owner) view returns (uint256)",
+//   "event Transfer(address indexed from, address indexed to, uint256 amount)",
+//   "function transfer(address to, uint256 value) public returns (bool)",
+// ]);
+
+export const approveEIP155Request = async (
   requestEvent: SignClientTypes.EventArguments["session_request"],
   account: any,
   selectedChain: any,
-) {
+) => {
   const { params, id } = requestEvent;
   const { request } = params;
 
@@ -18,7 +26,10 @@ export async function approveEIP155Request(
   console.log("selectedChain", selectedChain);
   console.log(request.method);
 
+  // viem.sh walletClient
   const walletClient = walletClientSelector(selectedChain, account);
+  // // viem.sh
+  // const publicClient = publicClientSelector(selectedChain);
 
   if (walletClient) {
     switch (request.method) {
@@ -40,14 +51,20 @@ export async function approveEIP155Request(
         return formatJsonRpcResult(id, signedData);
 
       case EIP155_SIGNING_METHODS.ETH_SEND_RAW_TRANSACTION:
+      // just dont know how this works
       case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
         const sendTransaction = request.params[0];
-        console.log("ETH SEND TRANSACTION", sendTransaction);
-        sendTransaction.gas = parseGwei("0.000028");
-        // sendTransaction.gasPrice = parseGwei("20");
-        sendTransaction.maxFeePerGas = parseGwei("0.00002");
-        console.log("ETH SEND TRANSACTION", sendTransaction);
-        const hash = await walletClient.sendTransaction(sendTransaction);
+        console.log("ETH SEND TRANSACTION", request);
+        console.log("ETH SEND TRANSACTION", sendTransaction.data, fromHex(sendTransaction.data, "string"));
+
+        const hash = await walletClient.sendTransaction({
+          account,
+          to: sendTransaction.to,
+          value: sendTransaction.value,
+          gasPrice: selectedChain.gas,
+        });
+        // sendTransaction.maxFeePerGas = parseGwei("20");
+        // const hash = await walletClient.sendTransaction(sendTransaction);
         return formatJsonRpcResult(id, hash);
 
       case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
@@ -60,9 +77,9 @@ export async function approveEIP155Request(
         throw new Error(getSdkError("INVALID_METHOD").message);
     }
   }
-}
+};
 
-export function rejectEIP155Request(request: SignClientTypes.EventArguments["session_request"]) {
+export const rejectEIP155Request = (request: SignClientTypes.EventArguments["session_request"]) => {
   const { id } = request;
   const response = {
     id,
@@ -74,4 +91,4 @@ export function rejectEIP155Request(request: SignClientTypes.EventArguments["ses
   };
   return response;
   //   return formatJsonRpcError(id, getSdkError("USER_REJECTED_METHODS").message);
-}
+};

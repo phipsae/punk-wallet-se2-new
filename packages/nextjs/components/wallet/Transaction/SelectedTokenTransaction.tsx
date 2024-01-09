@@ -18,6 +18,7 @@ export const SelectedTokenTransaction = ({
   tokenAddress,
   refreshCount,
 }: SelectedTokenTransactionProps) => {
+  // isConnect checks if wallet is connected to rainbowwallet
   const { isConnected } = useAccount();
   useEffect(() => {
     // Code to refresh the component data

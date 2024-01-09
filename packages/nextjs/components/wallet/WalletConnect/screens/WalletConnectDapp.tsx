@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 import { EIP155_SIGNING_METHODS } from "../utils/EIP155Lib";
-import useInitialization, { // approvedNamespaces,
-  // core,
-  // onSessionProposal,
-  web3WalletPair,
-  web3wallet,
-} from "../utils/WalletConnectUtils";
+import useInitialization, { web3WalletPair, web3wallet } from "../utils/WalletConnectUtils";
+// import { getSupportedChainIds } from "../utils/WalletConnectUtils";
 import { ConnectModal } from "./ConnectModal";
-import PairingModal from "./PairingModal";
+import { PairingModal } from "./PairingModal";
 import { Pairings } from "./Pairings";
 import { SignModal } from "./SignModal";
-import { SessionTypes, SignClientTypes } from "@walletconnect/types";
+import { SignClientTypes } from "@walletconnect/types";
+import { SessionTypes } from "@walletconnect/types";
 import { getSdkError } from "@walletconnect/utils";
+// import { buildApprovedNamespaces } from "@walletconnect/utils";
+// import { Web3WalletTypes } from "@walletconnect/web3wallet";
 import { privateKeyToAccount } from "viem/accounts";
 import { useSharedState } from "~~/sharedStateContext";
 
@@ -28,6 +27,8 @@ export const WalletConnectDapp = () => {
 
   const [requestSession, setRequestSession] = useState();
   const [requestEventData, setRequestEventData] = useState();
+
+  // const [proposalID, setProposalID] = useState<number | undefined>();
 
   let account: any;
 
@@ -51,6 +52,54 @@ export const WalletConnectDapp = () => {
     setCurrentProposal(proposal);
   }, []);
 
+  // // w approved Namespaces
+  // let approvedNamespaces: any;
+
+  // const onSessionProposal = useCallback(
+  //   async (
+  //     { id, params }: Web3WalletTypes.SessionProposal,
+  //     address: any,
+
+  //     // web3wallet: any,
+  //   ) => {
+  //     console.log("Params", params);
+  //     console.log("id", id);
+  //     try {
+  //       // ------- namespaces builder util from ------------ //
+  //       setProposalID(id);
+  //       console.log("proposalID", proposalID);
+  //       approvedNamespaces = buildApprovedNamespaces({
+  //         proposal: params,
+  //         supportedNamespaces: {
+  //           eip155: {
+  //             chains: getSupportedChainIds().map(chainId => "eip155:" + chainId), // ["eip155:1", "eip155:137", ...]
+  //             methods: [
+  //               "eth_sendTransaction",
+  //               "eth_signTransaction",
+  //               "eth_sign",
+  //               "personal_sign",
+  //               "eth_signTypedData",
+  //               "eth_signTypedData_v4",
+  //             ],
+  //             events: ["accountsChanged", "chainChanged"],
+  //             accounts: getSupportedChainIds().map(chainId => "eip155:" + chainId + ":" + address), // ["eip155:1:0x8c9D11cE64289701eFEB6A68c16e849E9A2e781d", "eip155:137:0x8c9D11cE64289701eFEB6A68c16e849E9A2e781d", ...]
+  //           },
+  //         },
+  //       });
+  //       // ------- end namespaces builder util ------------ //
+  //     } catch (error) {
+  //       console.error("Something is wrong with the namespaces", error);
+  //       // setWalletConnectUrl("");
+  //       // await web3wallet.rejectSession({
+  //       //   id: id,
+  //       //   reason: getSdkError("USER_REJECTED"),
+  //       // });
+  //     }
+  //     setCurrentProposal(approvedNamespaces);
+  //   },
+  //   [],
+  // );
+
   const handleReject = useCallback(async () => {
     if (currentProposal) {
       const { id } = currentProposal;
@@ -65,6 +114,22 @@ export const WalletConnectDapp = () => {
     }
   }, [currentProposal]);
 
+  // // Handle Accept with approved namespaces
+  // const handleAccept = useCallback(async () => {
+  //   console.log("ID", proposalID);
+  //   if (currentProposal) {
+  //     await web3wallet.approveSession({
+  //       id: proposalID,
+  //       namespaces: currentProposal,
+  //     });
+  //     setModalVisible(false);
+  //     setCurrentWCURI("");
+  //     setCurrentProposal(undefined);
+  //     setSuccessfulSession(true);
+  //   }
+  // }, [currentProposal, proposalID]);
+
+  // Handle Accept w/o approved namespaces
   const handleAccept = useCallback(async () => {
     // @ts-ignore
     const { id, params } = currentProposal;
@@ -139,6 +204,9 @@ export const WalletConnectDapp = () => {
   }, []);
 
   useEffect(() => {
+    // // w namespaces
+    // web3wallet?.on("session_proposal", proposal => onSessionProposal(proposal, account.address));
+    // // w/o namespaces
     web3wallet?.on("session_proposal", onSessionProposal);
     web3wallet?.on("session_request", onSessionRequest);
   }, [onSessionProposal, pair, handleAccept, handleReject, onSessionRequest]);
@@ -146,7 +214,7 @@ export const WalletConnectDapp = () => {
   return (
     <>
       <h1 className="text-center font-bold mt-5">Wallet Connect</h1>
-      <button onClick={() => web3wallet?.on("session_proposal", onSessionProposal)}> Handle Accept</button>
+      <button onClick={() => console.log(web3wallet)}> Web3Wallet</button>
       {web3wallet && <Pairings />}
       {successfulSession && (
         <div>

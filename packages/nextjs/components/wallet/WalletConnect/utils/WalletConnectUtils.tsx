@@ -60,12 +60,13 @@ export async function web3WalletPair(params: { uri: string }) {
 export let approvedNamespaces: any;
 
 export const onSessionProposal = async (
-  { params, id }: Web3WalletTypes.SessionProposal,
+  { params }: Web3WalletTypes.SessionProposal,
   address: any,
-  web3wallet: any,
+
+  // web3wallet: any,
 ) => {
   try {
-    // ------- namespaces builder util ------------ //
+    // ------- namespaces builder util from ------------ //
     approvedNamespaces = buildApprovedNamespaces({
       proposal: params,
       supportedNamespaces: {
@@ -85,18 +86,13 @@ export const onSessionProposal = async (
       },
     });
     // ------- end namespaces builder util ------------ //
-
-    // const session = await web3wallet.approveSession({
-    //   id,
-    //   namespaces: approvedNamespaces,
-    // });
   } catch (error) {
     console.error("Something is wrong with the namespaces", error);
     // setWalletConnectUrl("");
-    await web3wallet.rejectSession({
-      id: id,
-      reason: getSdkError("USER_REJECTED"),
-    });
+    // await web3wallet.rejectSession({
+    //   id: id,
+    //   reason: getSdkError("USER_REJECTED"),
+    // });
   }
 };
 
@@ -144,7 +140,7 @@ export const rejectRequestV2 = (web3wallet: any, event: any) => {
 };
 
 // Get All
-const getSupportedChainIds = () => {
+export const getSupportedChainIds = () => {
   const supportedChainIds = [];
 
   for (const network of Object.values(Tokens)) {
